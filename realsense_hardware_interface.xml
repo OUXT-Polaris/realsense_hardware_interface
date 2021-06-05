@@ -1,0 +1,10 @@
+ 
+<library path="realsense_hardware_interface">
+    <class name="realsense_hardware_interface/T265HardwareInterface"
+           type="realsense_hardware_interface::T265HardwareInterface"
+           base_class_type="hardware_interface::SensorInterface">
+      <description>
+        A realsense T265 hardware plugin for the ros2_control.
+      </description>
+    </class>
+</library>

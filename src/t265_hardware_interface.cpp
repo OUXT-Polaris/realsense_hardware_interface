@@ -45,5 +45,8 @@ hardware_interface::return_type T265HardwareInterface::read()
 hardware_interface::return_type T265HardwareInterface::configure(
   const hardware_interface::HardwareInfo & info)
 {
+  if (configure_default(info) != hardware_interface::return_type::OK) {
+    return hardware_interface::return_type::ERROR;
+  }
 }
 }  // namespace realsense_hardware_interface

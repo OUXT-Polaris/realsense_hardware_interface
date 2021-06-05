@@ -18,13 +18,12 @@
 #include <hardware_interface/base_interface.hpp>
 #include <hardware_interface/handle.hpp>
 #include <hardware_interface/hardware_info.hpp>
-#include <hardware_interface/system_interface.hpp>
+#include <hardware_interface/sensor_interface.hpp>
 #include <hardware_interface/types/hardware_interface_return_values.hpp>
 #include <hardware_interface/types/hardware_interface_status_values.hpp>
 #include <librealsense2/rs.hpp>
 #include <rclcpp/rclcpp.hpp>
 #include <realsense_hardware_interface/visibility_control.hpp>
-
 #include <memory>
 #include <string>
 #include <vector>
@@ -32,7 +31,7 @@
 namespace realsense_hardware_interface
 {
 class T265HardwareInterface
-  : public hardware_interface::BaseInterface<hardware_interface::SystemInterface>
+  : public hardware_interface::BaseInterface<hardware_interface::SensorInterface>
 {
 public:
   RCLCPP_SHARED_PTR_DEFINITIONS(T265HardwareInterface)
@@ -44,9 +43,6 @@ public:
   std::vector<hardware_interface::StateInterface> export_state_interfaces() override;
 
   REALSENSE_HARDWARE_INTERFACE_PUBLIC
-  std::vector<hardware_interface::CommandInterface> export_command_interfaces() override;
-
-  REALSENSE_HARDWARE_INTERFACE_PUBLIC
   hardware_interface::return_type start() override;
 
   REALSENSE_HARDWARE_INTERFACE_PUBLIC
@@ -54,9 +50,6 @@ public:
 
   REALSENSE_HARDWARE_INTERFACE_PUBLIC
   hardware_interface::return_type read() override;
-
-  REALSENSE_HARDWARE_INTERFACE_PUBLIC
-  hardware_interface::return_type write() override;
 
 private:
   rs2::pipeline pipe_;
