@@ -77,15 +77,6 @@ def generate_launch_description():
             robot_state_publisher,
             view_model_arg,
             rviz,
-            control_node,
-            ExecuteProcess(
-                cmd=[
-                    "ros2",
-                    "control",
-                    "load_start_controller",
-                    "joint_state_controller"],
-                output="screen",
-                shell=True,
-            )
+            control_node
         ]
     )

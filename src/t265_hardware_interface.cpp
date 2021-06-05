@@ -14,6 +14,8 @@
 
 #include <realsense_hardware_interface/t265_hardware_interface.hpp>
 
+#include <vector>
+
 namespace realsense_hardware_interface
 {
 hardware_interface::return_type T265HardwareInterface::configure(
@@ -35,6 +37,7 @@ hardware_interface::return_type T265HardwareInterface::start()
   cfg_.enable_stream(RS2_STREAM_GYRO);
   cfg_.enable_stream(RS2_STREAM_ACCEL);
   cfg_.enable_stream(RS2_STREAM_POSE);
+  pipe_.start(cfg_);
   return hardware_interface::return_type::OK;
 }
 
@@ -49,6 +52,7 @@ hardware_interface::return_type T265HardwareInterface::read()
   pipe_.poll_for_frames(&frameset);
   if (rs2::motion_frame accel_frame = frameset.first_or_default(RS2_STREAM_ACCEL)) {
     rs2_vector accel = accel_frame.get_motion_data();
+    std::cout << accel.x << "," << accel.y << "," << accel.z << std::endl;
   }
 
   if (rs2::motion_frame gyro_frame = frameset.first_or_default(RS2_STREAM_GYRO)) {
