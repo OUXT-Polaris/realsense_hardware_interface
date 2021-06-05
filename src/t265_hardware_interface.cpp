@@ -16,11 +16,30 @@
 
 namespace realsense_hardware_interface
 {
+hardware_interface::return_type T265HardwareInterface::configure(
+  const hardware_interface::HardwareInfo & info)
+{
+  if (configure_default(info) != hardware_interface::return_type::OK) {
+    return hardware_interface::return_type::ERROR;
+  }
+  return hardware_interface::return_type::OK;
+}
+
+std::vector<hardware_interface::StateInterface> T265HardwareInterface::export_state_interfaces()
+{
+  return {};
+}
+
 hardware_interface::return_type T265HardwareInterface::start()
 {
   cfg_.enable_stream(RS2_STREAM_GYRO);
   cfg_.enable_stream(RS2_STREAM_ACCEL);
   cfg_.enable_stream(RS2_STREAM_POSE);
+  return hardware_interface::return_type::OK;
+}
+
+hardware_interface::return_type T265HardwareInterface::stop()
+{
   return hardware_interface::return_type::OK;
 }
 
@@ -42,11 +61,9 @@ hardware_interface::return_type T265HardwareInterface::read()
   return hardware_interface::return_type::OK;
 }
 
-hardware_interface::return_type T265HardwareInterface::configure(
-  const hardware_interface::HardwareInfo & info)
-{
-  if (configure_default(info) != hardware_interface::return_type::OK) {
-    return hardware_interface::return_type::ERROR;
-  }
-}
 }  // namespace realsense_hardware_interface
+
+#include "pluginlib/class_list_macros.hpp"
+
+PLUGINLIB_EXPORT_CLASS(
+  realsense_hardware_interface::T265HardwareInterface, hardware_interface::SensorInterface)

@@ -1,18 +1,18 @@
 <robot name="test_robot">
   <link name="base_link"/>
 
-  <joint name="body1_joint" type="fixed">
+  <joint name="t265_joint" type="fixed">
     <parent link="base_link"/>
-    <child  link="t265"/>
+    <child  link="t265_link"/>
   </joint>
-  <link name="t265">
+  <link name="t265_link">
   </link>
 
   <ros2_control name="t265_control" type="sensor">
     <hardware>
-        <plugin>realsense_hardware_interface/T265HardwareInterface</plugin>
+      <plugin>realsense_hardware_interface/T265HardwareInterface</plugin>
     </hardware>
-    <joint name="joint1">
+    <joint name="t265_link">
     </joint>
   </ros2_control>
 </robot>
