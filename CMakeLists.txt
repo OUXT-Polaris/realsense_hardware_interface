@@ -13,7 +13,7 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
-find_package(librealsense_vendor REQUIRED)
+find_package(librealsense2 REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_components REQUIRED)
 find_package(ros2_control REQUIRED)
@@ -35,7 +35,7 @@ ament_target_dependencies(realsense_hardware_interface
   rclcpp
   ros2_control
   realtime_tools
-  librealsense_vendor
+  librealsense2
 )
 pluginlib_export_plugin_description_file(hardware_interface realsense_hardware_interface.xml)
 
@@ -48,7 +48,7 @@ ament_export_dependencies(
   rclcpp
   ros2_control
   realtime_tools
-  librealsense_vendor
+  librealsense2
 )
 
 install(
