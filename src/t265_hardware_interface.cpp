@@ -41,4 +41,9 @@ hardware_interface::return_type T265HardwareInterface::read()
   }
   return hardware_interface::return_type::OK;
 }
+
+hardware_interface::return_type T265HardwareInterface::configure(
+  const hardware_interface::HardwareInfo & info)
+{
+}
 }  // namespace realsense_hardware_interface

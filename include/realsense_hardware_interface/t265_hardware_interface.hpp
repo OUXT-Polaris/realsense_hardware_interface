@@ -12,7 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <realsense_hardware_interface/visibility_control.h>
+#ifndef REALSENSE_HARDWARE_INTERFACE__T265_HARDWARE_INTERFACE_HPP_
+#define REALSENSE_HARDWARE_INTERFACE__T265_HARDWARE_INTERFACE_HPP_
 
 #include <hardware_interface/base_interface.hpp>
 #include <hardware_interface/handle.hpp>
@@ -21,15 +22,17 @@
 #include <hardware_interface/types/hardware_interface_return_values.hpp>
 #include <hardware_interface/types/hardware_interface_status_values.hpp>
 #include <librealsense2/rs.hpp>
-#include <memory>
 #include <rclcpp/rclcpp.hpp>
+#include <realsense_hardware_interface/visibility_control.hpp>
+
+#include <memory>
 #include <string>
 #include <vector>
 
 namespace realsense_hardware_interface
 {
 class T265HardwareInterface
-: public hardware_interface::BaseInterface<hardware_interface::SystemInterface>
+  : public hardware_interface::BaseInterface<hardware_interface::SystemInterface>
 {
 public:
   RCLCPP_SHARED_PTR_DEFINITIONS(T265HardwareInterface)
@@ -58,7 +61,7 @@ public:
 private:
   rs2::pipeline pipe_;
   rs2::config cfg_;
-  template <typename T>
+  template<typename T>
   T getParameter(const std::string key, const hardware_interface::ComponentInfo & info) const
   {
     T param;
@@ -94,7 +97,7 @@ private:
       parameter = true;
     }
   }
-  template <typename T>
+  template<typename T>
   T getHardwareParameter(const std::string key) const
   {
     T param;
@@ -128,3 +131,5 @@ private:
   }
 };
 }  // namespace realsense_hardware_interface
+
+#endif  // REALSENSE_HARDWARE_INTERFACE__T265_HARDWARE_INTERFACE_HPP_
