@@ -21,6 +21,8 @@
 #include <geometry_msgs/msg/twist.hpp>
 #include <geometry_msgs/msg/vector3.hpp>
 
+#include <string>
+
 namespace realsense_hardware_interface
 {
 void toMsg(const rs2_vector & point, geometry_msgs::msg::Point & msg)
@@ -65,6 +67,42 @@ void toMsg(
   toMsg(pose.rotation, msg.pose.pose.orientation);
   toMsg(pose.velocity, pose.angular_velocity, msg.twist.twist);
 }
-} // namespace realsense_hardware_interface
+
+struct DoubleDataHandle
+{
+  const std::string & name;
+  const double value;
+  DoubleDataHandle(const std::string & name, double value)
+  : name(name), value(value) {}
+};
+
+struct Rs2VectorHandle
+{
+  const std::string & name;
+  const DoubleDataHandle x;
+  const DoubleDataHandle y;
+  const DoubleDataHandle z;
+  Rs2VectorHandle(const std::string & name, double x, double y, double z)
+  : name(name),
+    x(name + "::x", x),
+    y(name + "::y", y),
+    z(name + "::z", z) {}
+};
+
+struct Rs2QuaternionHandle
+{
+  const std::string & name;
+  const DoubleDataHandle x;
+  const DoubleDataHandle y;
+  const DoubleDataHandle z;
+  const DoubleDataHandle w;
+  Rs2QuaternionHandle(const std::string & name, double x, double y, double z, double w)
+  : name(name),
+    x(name + "::x", x),
+    y(name + "::y", y),
+    z(name + "::z", z),
+    w(name + "::z", w) {}
+};
+}  // namespace realsense_hardware_interface
 
 #endif  // REALSENSE_HARDWARE_INTERFACE__UTIL_HPP_
