@@ -71,7 +71,7 @@ void toMsg(
 struct DoubleDataHandle
 {
   const std::string & name;
-  const double value;
+  double value;
   DoubleDataHandle(const std::string & name, double value)
   : name(name), value(value) {}
 };
@@ -79,9 +79,15 @@ struct DoubleDataHandle
 struct Rs2VectorHandle
 {
   const std::string & name;
-  const DoubleDataHandle x;
-  const DoubleDataHandle y;
-  const DoubleDataHandle z;
+  DoubleDataHandle x;
+  DoubleDataHandle y;
+  DoubleDataHandle z;
+  Rs2VectorHandle(const std::string & name, const rs2_vector & vec)
+  : name(name),
+    x(name + "::x", vec.x),
+    y(name + "::y", vec.y),
+    z(name + "::z", vec.z) {}
+
   Rs2VectorHandle(const std::string & name, double x, double y, double z)
   : name(name),
     x(name + "::x", x),
@@ -92,16 +98,45 @@ struct Rs2VectorHandle
 struct Rs2QuaternionHandle
 {
   const std::string & name;
-  const DoubleDataHandle x;
-  const DoubleDataHandle y;
-  const DoubleDataHandle z;
-  const DoubleDataHandle w;
+  DoubleDataHandle x;
+  DoubleDataHandle y;
+  DoubleDataHandle z;
+  DoubleDataHandle w;
+  Rs2QuaternionHandle(const std::string & name, const rs2_quaternion & quat)
+  : name(name),
+    x(name + "::x", quat.x),
+    y(name + "::y", quat.y),
+    z(name + "::z", quat.z),
+    w(name + "::z", quat.w) {}
   Rs2QuaternionHandle(const std::string & name, double x, double y, double z, double w)
   : name(name),
     x(name + "::x", x),
     y(name + "::y", y),
     z(name + "::z", z),
     w(name + "::z", w) {}
+};
+
+struct Rs2PoseHandle
+{
+  const std::string & name;
+  Rs2VectorHandle translation;
+  Rs2VectorHandle velocity;
+  Rs2VectorHandle acceleration;
+  Rs2QuaternionHandle rotation;
+  Rs2VectorHandle angular_velocity;
+  Rs2VectorHandle angular_acceleration;
+  DoubleDataHandle tracker_confidence;
+  DoubleDataHandle mapper_confidence;
+  Rs2PoseHandle(const std::string & name, const rs2_pose & pose)
+  : name(name),
+    translation(name + "::translation", pose.translation),
+    velocity(name + "::velocity", pose.velocity),
+    acceleration(name + "::acceleration", pose.acceleration),
+    rotation(name + "::rotation", pose.rotation),
+    angular_velocity(name + "::angular_velocity", pose.angular_velocity),
+    angular_acceleration(name + "::angular_acceleration", pose.angular_acceleration),
+    tracker_confidence(name + "::tracker_confidence", pose.tracker_confidence),
+    mapper_confidence(name + "::mapper_confidence", pose.mapper_confidence) {}
 };
 }  // namespace realsense_hardware_interface
 
