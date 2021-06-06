@@ -89,6 +89,10 @@ public:
   {
     value = val;
   }
+  double getValue() const
+  {
+    return value;
+  }
 };
 
 class Rs2VectorHandle
@@ -121,6 +125,14 @@ public:
     x.setValue(vec.x);
     y.setValue(vec.y);
     z.setValue(vec.z);
+  }
+  const rs2_vector getValue() const
+  {
+    rs2_vector vec;
+    vec.x = x.getValue();
+    vec.y = y.getValue();
+    vec.z = z.getValue();
+    return vec;
   }
 };
 
@@ -162,6 +174,15 @@ public:
     y.setValue(quat.y);
     z.setValue(quat.z);
     w.setValue(quat.w);
+  }
+  const rs2_quaternion getValue() const
+  {
+    rs2_quaternion quat;
+    quat.x = x.getValue();
+    quat.y = y.getValue();
+    quat.z = z.getValue();
+    quat.w = w.getValue();
+    return quat;
   }
 };
 
@@ -214,6 +235,19 @@ public:
     angular_acceleration.setValue(pose.angular_acceleration);
     tracker_confidence.setValue(pose.tracker_confidence);
     mapper_confidence.setValue(pose.mapper_confidence);
+  }
+  const rs2_pose getValue()
+  {
+    rs2_pose pose;
+    pose.translation = translation.getValue();
+    pose.velocity = velocity.getValue();
+    pose.acceleration = acceleration.getValue();
+    pose.rotation = rotation.getValue();
+    pose.angular_velocity = angular_velocity.getValue();
+    pose.angular_acceleration = angular_acceleration.getValue();
+    pose.tracker_confidence = tracker_confidence.getValue();
+    pose.mapper_confidence = mapper_confidence.getValue();
+    return pose;
   }
 };
 }  // namespace realsense_hardware_interface
