@@ -23,6 +23,7 @@
 #include <hardware_interface/types/hardware_interface_status_values.hpp>
 #include <librealsense2/rs.hpp>
 #include <rclcpp/rclcpp.hpp>
+#include <realsense_hardware_interface/util.hpp>
 #include <realsense_hardware_interface/visibility_control.hpp>
 #include <memory>
 #include <string>

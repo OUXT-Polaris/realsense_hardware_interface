@@ -34,8 +34,6 @@ std::vector<hardware_interface::StateInterface> T265HardwareInterface::export_st
 
 hardware_interface::return_type T265HardwareInterface::start()
 {
-  cfg_.enable_stream(RS2_STREAM_GYRO);
-  cfg_.enable_stream(RS2_STREAM_ACCEL);
   cfg_.enable_stream(RS2_STREAM_POSE);
   pipe_.start(cfg_);
   return hardware_interface::return_type::OK;
@@ -50,17 +48,9 @@ hardware_interface::return_type T265HardwareInterface::read()
 {
   rs2::frameset frameset;
   pipe_.poll_for_frames(&frameset);
-  if (rs2::motion_frame accel_frame = frameset.first_or_default(RS2_STREAM_ACCEL)) {
-    rs2_vector accel = accel_frame.get_motion_data();
-    std::cout << accel.x << "," << accel.y << "," << accel.z << std::endl;
-  }
-
-  if (rs2::motion_frame gyro_frame = frameset.first_or_default(RS2_STREAM_GYRO)) {
-    rs2_vector gyro = gyro_frame.get_motion_data();
-  }
-
   if (rs2::pose_frame pose_frame = frameset.first_or_default(RS2_STREAM_POSE)) {
     rs2_pose pose = pose_frame.get_pose_data();
+    std::cout << pose.velocity.x << "," << pose.velocity.y << "," << pose.velocity.z << std::endl;
   }
   return hardware_interface::return_type::OK;
 }

@@ -19,6 +19,7 @@ find_package(ros2_control REQUIRED)
 find_package(pluginlib REQUIRED)
 find_package(realtime_tools REQUIRED)
 find_package(hardware_interface REQUIRED)
+find_package(nav_msgs REQUIRED)
 find_package(realsense2 REQUIRED)
 
 add_library(realsense_hardware_interface SHARED
@@ -38,6 +39,7 @@ ament_target_dependencies(realsense_hardware_interface
   rclcpp
   ros2_control
   realtime_tools
+  nav_msgs
 )
 pluginlib_export_plugin_description_file(hardware_interface realsense_hardware_interface.xml)
 
@@ -50,6 +52,7 @@ ament_export_dependencies(
   rclcpp
   ros2_control
   realtime_tools
+  nav_msgs
 )
 
 install(
