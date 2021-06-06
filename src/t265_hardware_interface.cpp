@@ -29,7 +29,10 @@ hardware_interface::return_type T265HardwareInterface::configure(
 
 std::vector<hardware_interface::StateInterface> T265HardwareInterface::export_state_interfaces()
 {
-  return {};
+  pose_handle_ptr_ = std::make_shared<Rs2PoseHandle>("t265", "rs2_pose", pose_);
+  std::vector<hardware_interface::StateInterface> interfaces = {};
+  // pose_handle_ptr_->appendStateInterface(interfaces);
+  return interfaces;
 }
 
 hardware_interface::return_type T265HardwareInterface::start()
@@ -49,9 +52,7 @@ hardware_interface::return_type T265HardwareInterface::read()
   rs2::frameset frameset;
   pipe_.poll_for_frames(&frameset);
   if (rs2::pose_frame pose_frame = frameset.first_or_default(RS2_STREAM_POSE)) {
-    rs2_pose pose = pose_frame.get_pose_data();
-    nav_msgs::msg::Odometry odom;
-    toMsg(pose, "t265", "odom", rclcpp::Time(), odom);
+    pose_ = pose_frame.get_pose_data();
   }
   return hardware_interface::return_type::OK;
 }

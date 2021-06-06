@@ -68,11 +68,16 @@ void toMsg(
   toMsg(pose.velocity, pose.angular_velocity, msg.twist.twist);
 }
 
-struct DoubleDataHandle
+class DoubleDataHandle
 {
+public:
   const std::string & sensor_name;
   const std::string & name;
+
+private:
   double value;
+
+public:
   DoubleDataHandle(const std::string & sensor_name, const std::string & name, double value)
   : sensor_name(sensor_name), name(name), value(value) {}
   void appendStateInterface(std::vector<hardware_interface::StateInterface> & interfaces)
@@ -82,15 +87,24 @@ struct DoubleDataHandle
         "realsemse_hardware_interface"), "exporting interface" << sensor_name << "/" << name);
     interfaces.emplace_back(hardware_interface::StateInterface(sensor_name, name, &value));
   }
+  void setValue(double val)
+  {
+    value = val;
+  }
 };
 
-struct Rs2VectorHandle
+class Rs2VectorHandle
 {
+public:
   const std::string & sensor_name;
   const std::string & name;
+
+private:
   DoubleDataHandle x;
   DoubleDataHandle y;
   DoubleDataHandle z;
+
+public:
   Rs2VectorHandle(const std::string & sensor_name, const std::string & name, const rs2_vector & vec)
   : sensor_name(sensor_name),
     name(name),
@@ -103,16 +117,27 @@ struct Rs2VectorHandle
     y.appendStateInterface(interfaces);
     z.appendStateInterface(interfaces);
   }
+  void setValue(const rs2_vector & vec)
+  {
+    x.setValue(vec.x);
+    y.setValue(vec.y);
+    z.setValue(vec.z);
+  }
 };
 
-struct Rs2QuaternionHandle
+class Rs2QuaternionHandle
 {
+public:
   const std::string & sensor_name;
   const std::string & name;
+
+private:
   DoubleDataHandle x;
   DoubleDataHandle y;
   DoubleDataHandle z;
   DoubleDataHandle w;
+
+public:
   Rs2QuaternionHandle(
     const std::string & sensor_name, const std::string & name,
     const rs2_quaternion & quat)
@@ -129,12 +154,22 @@ struct Rs2QuaternionHandle
     z.appendStateInterface(interfaces);
     w.appendStateInterface(interfaces);
   }
+  void setValue(const rs2_quaternion & quat)
+  {
+    x.setValue(quat.x);
+    y.setValue(quat.y);
+    z.setValue(quat.z);
+    w.setValue(quat.w);
+  }
 };
 
-struct Rs2PoseHandle
+class Rs2PoseHandle
 {
+public:
   const std::string & sensor_name;
   const std::string & name;
+
+private:
   Rs2VectorHandle translation;
   Rs2VectorHandle velocity;
   Rs2VectorHandle acceleration;
@@ -143,6 +178,8 @@ struct Rs2PoseHandle
   Rs2VectorHandle angular_acceleration;
   DoubleDataHandle tracker_confidence;
   DoubleDataHandle mapper_confidence;
+
+public:
   Rs2PoseHandle(const std::string & sensor_name, const std::string & name, const rs2_pose & pose)
   : sensor_name(sensor_name),
     name(name),
@@ -163,6 +200,17 @@ struct Rs2PoseHandle
     angular_velocity.appendStateInterface(interfaces);
     tracker_confidence.appendStateInterface(interfaces);
     mapper_confidence.appendStateInterface(interfaces);
+  }
+  void setValue(const rs2_pose & pose)
+  {
+    translation.setValue(pose.translation);
+    velocity.setValue(pose.velocity);
+    acceleration.setValue(pose.acceleration);
+    rotation.setValue(pose.rotation);
+    angular_velocity.setValue(pose.angular_velocity);
+    angular_acceleration.setValue(pose.angular_acceleration);
+    tracker_confidence.setValue(pose.tracker_confidence);
+    mapper_confidence.setValue(pose.mapper_confidence);
   }
 };
 }  // namespace realsense_hardware_interface
