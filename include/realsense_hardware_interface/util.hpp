@@ -70,54 +70,70 @@ void toMsg(
 
 struct DoubleDataHandle
 {
+  const std::string & sensor_name;
   const std::string & name;
   double value;
-  DoubleDataHandle(const std::string & name, double value)
-  : name(name), value(value) {}
+  DoubleDataHandle(const std::string & sensor_name, const std::string & name, double value)
+  : sensor_name(sensor_name), name(name), value(value) {}
+  void appendStateInterface(std::vector<hardware_interface::StateInterface> & interfaces)
+  {
+    RCLCPP_INFO_STREAM(
+      rclcpp::get_logger(
+        "realsemse_hardware_interface"), "exporting interface" << sensor_name << "/" << name);
+    interfaces.emplace_back(hardware_interface::StateInterface(sensor_name, name, &value));
+  }
 };
 
 struct Rs2VectorHandle
 {
+  const std::string & sensor_name;
   const std::string & name;
   DoubleDataHandle x;
   DoubleDataHandle y;
   DoubleDataHandle z;
-  Rs2VectorHandle(const std::string & name, const rs2_vector & vec)
-  : name(name),
-    x(name + "::x", vec.x),
-    y(name + "::y", vec.y),
-    z(name + "::z", vec.z) {}
-
-  Rs2VectorHandle(const std::string & name, double x, double y, double z)
-  : name(name),
-    x(name + "::x", x),
-    y(name + "::y", y),
-    z(name + "::z", z) {}
+  Rs2VectorHandle(const std::string & sensor_name, const std::string & name, const rs2_vector & vec)
+  : sensor_name(sensor_name),
+    name(name),
+    x(sensor_name, name + "::x", vec.x),
+    y(sensor_name, name + "::y", vec.y),
+    z(sensor_name, name + "::z", vec.z) {}
+  void appendStateInterface(std::vector<hardware_interface::StateInterface> & interfaces)
+  {
+    x.appendStateInterface(interfaces);
+    y.appendStateInterface(interfaces);
+    z.appendStateInterface(interfaces);
+  }
 };
 
 struct Rs2QuaternionHandle
 {
+  const std::string & sensor_name;
   const std::string & name;
   DoubleDataHandle x;
   DoubleDataHandle y;
   DoubleDataHandle z;
   DoubleDataHandle w;
-  Rs2QuaternionHandle(const std::string & name, const rs2_quaternion & quat)
-  : name(name),
-    x(name + "::x", quat.x),
-    y(name + "::y", quat.y),
-    z(name + "::z", quat.z),
-    w(name + "::z", quat.w) {}
-  Rs2QuaternionHandle(const std::string & name, double x, double y, double z, double w)
-  : name(name),
-    x(name + "::x", x),
-    y(name + "::y", y),
-    z(name + "::z", z),
-    w(name + "::z", w) {}
+  Rs2QuaternionHandle(
+    const std::string & sensor_name, const std::string & name,
+    const rs2_quaternion & quat)
+  : sensor_name(sensor_name),
+    name(name),
+    x(sensor_name, name + "::x", quat.x),
+    y(sensor_name, name + "::y", quat.y),
+    z(sensor_name, name + "::z", quat.z),
+    w(sensor_name, name + "::z", quat.w) {}
+  void appendStateInterface(std::vector<hardware_interface::StateInterface> & interfaces)
+  {
+    x.appendStateInterface(interfaces);
+    y.appendStateInterface(interfaces);
+    z.appendStateInterface(interfaces);
+    w.appendStateInterface(interfaces);
+  }
 };
 
 struct Rs2PoseHandle
 {
+  const std::string & sensor_name;
   const std::string & name;
   Rs2VectorHandle translation;
   Rs2VectorHandle velocity;
@@ -127,16 +143,27 @@ struct Rs2PoseHandle
   Rs2VectorHandle angular_acceleration;
   DoubleDataHandle tracker_confidence;
   DoubleDataHandle mapper_confidence;
-  Rs2PoseHandle(const std::string & name, const rs2_pose & pose)
-  : name(name),
-    translation(name + "::translation", pose.translation),
-    velocity(name + "::velocity", pose.velocity),
-    acceleration(name + "::acceleration", pose.acceleration),
-    rotation(name + "::rotation", pose.rotation),
-    angular_velocity(name + "::angular_velocity", pose.angular_velocity),
-    angular_acceleration(name + "::angular_acceleration", pose.angular_acceleration),
-    tracker_confidence(name + "::tracker_confidence", pose.tracker_confidence),
-    mapper_confidence(name + "::mapper_confidence", pose.mapper_confidence) {}
+  Rs2PoseHandle(const std::string & sensor_name, const std::string & name, const rs2_pose & pose)
+  : sensor_name(sensor_name),
+    name(name),
+    translation(sensor_name, name + "::translation", pose.translation),
+    velocity(sensor_name, name + "::velocity", pose.velocity),
+    acceleration(sensor_name, name + "::acceleration", pose.acceleration),
+    rotation(sensor_name, name + "::rotation", pose.rotation),
+    angular_velocity(sensor_name, name + "::angular_velocity", pose.angular_velocity),
+    angular_acceleration(sensor_name, name + "::angular_acceleration", pose.angular_acceleration),
+    tracker_confidence(sensor_name, name + "::tracker_confidence", pose.tracker_confidence),
+    mapper_confidence(sensor_name, name + "::mapper_confidence", pose.mapper_confidence) {}
+  void appendStateInterface(std::vector<hardware_interface::StateInterface> & interfaces)
+  {
+    translation.appendStateInterface(interfaces);
+    velocity.appendStateInterface(interfaces);
+    acceleration.appendStateInterface(interfaces);
+    rotation.appendStateInterface(interfaces);
+    angular_velocity.appendStateInterface(interfaces);
+    tracker_confidence.appendStateInterface(interfaces);
+    mapper_confidence.appendStateInterface(interfaces);
+  }
 };
 }  // namespace realsense_hardware_interface
 
