@@ -55,7 +55,6 @@ public:
 private:
   rs2::pipeline pipe_;
   rs2::config cfg_;
-  rs2_pose pose_;
   std::shared_ptr<Rs2PoseHandle> pose_handle_ptr_;
   template<typename T>
   T getParameter(const std::string key, const hardware_interface::ComponentInfo & info) const

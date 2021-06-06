@@ -71,20 +71,18 @@ void toMsg(
 class DoubleDataHandle
 {
 public:
-  const std::string & sensor_name;
-  const std::string & name;
+  const std::string sensor_name;
+  const std::string name;
 
 private:
   double value;
 
 public:
+  DoubleDataHandle() = delete;
   DoubleDataHandle(const std::string & sensor_name, const std::string & name, double value)
   : sensor_name(sensor_name), name(name), value(value) {}
   void appendStateInterface(std::vector<hardware_interface::StateInterface> & interfaces)
   {
-    RCLCPP_INFO_STREAM(
-      rclcpp::get_logger(
-        "realsemse_hardware_interface"), "exporting interface" << sensor_name << "/" << name);
     interfaces.emplace_back(hardware_interface::StateInterface(sensor_name, name, &value));
   }
   void setValue(double val)
@@ -96,8 +94,8 @@ public:
 class Rs2VectorHandle
 {
 public:
-  const std::string & sensor_name;
-  const std::string & name;
+  const std::string sensor_name;
+  const std::string name;
 
 private:
   DoubleDataHandle x;
@@ -105,6 +103,7 @@ private:
   DoubleDataHandle z;
 
 public:
+  Rs2VectorHandle() = delete;
   Rs2VectorHandle(const std::string & sensor_name, const std::string & name, const rs2_vector & vec)
   : sensor_name(sensor_name),
     name(name),
@@ -128,8 +127,8 @@ public:
 class Rs2QuaternionHandle
 {
 public:
-  const std::string & sensor_name;
-  const std::string & name;
+  const std::string sensor_name;
+  const std::string name;
 
 private:
   DoubleDataHandle x;
@@ -138,6 +137,7 @@ private:
   DoubleDataHandle w;
 
 public:
+  Rs2QuaternionHandle() = delete;
   Rs2QuaternionHandle(
     const std::string & sensor_name, const std::string & name,
     const rs2_quaternion & quat)
@@ -146,7 +146,9 @@ public:
     x(sensor_name, name + "::x", quat.x),
     y(sensor_name, name + "::y", quat.y),
     z(sensor_name, name + "::z", quat.z),
-    w(sensor_name, name + "::z", quat.w) {}
+    w(sensor_name, name + "::z", quat.w) 
+    {
+    }
   void appendStateInterface(std::vector<hardware_interface::StateInterface> & interfaces)
   {
     x.appendStateInterface(interfaces);
@@ -166,8 +168,8 @@ public:
 class Rs2PoseHandle
 {
 public:
-  const std::string & sensor_name;
-  const std::string & name;
+  const std::string sensor_name;
+  const std::string name;
 
 private:
   Rs2VectorHandle translation;
@@ -180,6 +182,7 @@ private:
   DoubleDataHandle mapper_confidence;
 
 public:
+  Rs2PoseHandle() = delete;
   Rs2PoseHandle(const std::string & sensor_name, const std::string & name, const rs2_pose & pose)
   : sensor_name(sensor_name),
     name(name),

@@ -29,9 +29,9 @@ hardware_interface::return_type T265HardwareInterface::configure(
 
 std::vector<hardware_interface::StateInterface> T265HardwareInterface::export_state_interfaces()
 {
-  pose_handle_ptr_ = std::make_shared<Rs2PoseHandle>("t265", "rs2_pose", pose_);
   std::vector<hardware_interface::StateInterface> interfaces = {};
-  // pose_handle_ptr_->appendStateInterface(interfaces);
+  pose_handle_ptr_ = std::make_shared<Rs2PoseHandle>("t265", "rs2_pose", rs2_pose());
+  pose_handle_ptr_->appendStateInterface(interfaces);
   return interfaces;
 }
 
@@ -52,7 +52,7 @@ hardware_interface::return_type T265HardwareInterface::read()
   rs2::frameset frameset;
   pipe_.poll_for_frames(&frameset);
   if (rs2::pose_frame pose_frame = frameset.first_or_default(RS2_STREAM_POSE)) {
-    pose_ = pose_frame.get_pose_data();
+    pose_handle_ptr_->setValue(pose_frame.get_pose_data());
   }
   return hardware_interface::return_type::OK;
 }
