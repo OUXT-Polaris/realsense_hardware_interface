@@ -22,8 +22,20 @@ find_package(hardware_interface REQUIRED)
 find_package(nav_msgs REQUIRED)
 find_package(realsense2 REQUIRED)
 
+include(FindProtobuf REQUIRED)
+
+set(PROTO_FILES
+  "proto/realsense2.proto"
+)
+protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS ${PROTO_FILES})
+include_directories(
+  include
+  ${CMAKE_BINARY_DIR}
+)
+
 add_library(realsense_hardware_interface SHARED
   src/t265_hardware_interface.cpp
+  ${PROTO_SRCS}
 )
 target_include_directories(
   realsense_hardware_interface
@@ -53,6 +65,11 @@ ament_export_dependencies(
   ros2_control
   realtime_tools
   nav_msgs
+)
+
+install(
+  FILES ${PROTO_HDRS}
+  DESTINATION include
 )
 
 install(

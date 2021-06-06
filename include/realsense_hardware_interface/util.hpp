@@ -15,6 +15,7 @@
 #ifndef REALSENSE_HARDWARE_INTERFACE__UTIL_HPP_
 #define REALSENSE_HARDWARE_INTERFACE__UTIL_HPP_
 
+#include <realsense2.pb.h>
 #include <rclcpp/rclcpp.hpp>
 #include <librealsense2/rs.hpp>
 #include <nav_msgs/msg/odometry.hpp>
@@ -23,6 +24,33 @@
 
 namespace realsense_hardware_interface
 {
+void toProto(const rs2_vector & vec, realsense2_proto::rs2_vector & proto)
+{
+  proto.set_x(vec.x);
+  proto.set_y(vec.y);
+  proto.set_z(vec.z);
+}
+
+void toProto(const rs2_quaternion & quat, realsense2_proto::rs2_quaternion & proto)
+{
+  proto.set_x(quat.x);
+  proto.set_y(quat.y);
+  proto.set_z(quat.z);
+  proto.set_w(quat.w);
+}
+
+void toProto(const rs2_pose & pose, realsense2_proto::rs2_pose & proto)
+{
+  toProto(pose.translation, *proto.mutable_translation());
+  toProto(pose.velocity, *proto.mutable_velocity());
+  toProto(pose.acceleration, *proto.mutable_acceleration());
+  toProto(pose.rotation, *proto.mutable_rotation());
+  toProto(pose.angular_velocity, *proto.mutable_angular_velocity());
+  toProto(pose.angular_acceleration, *proto.mutable_angular_acceleration());
+  proto.set_tracker_confidence(pose.tracker_confidence);
+  proto.set_mapper_confidence(pose.mapper_confidence);
+}
+
 void toMsg(const rs2_vector & point, geometry_msgs::msg::Point & msg)
 {
   msg.x = point.x;

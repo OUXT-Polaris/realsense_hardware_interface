@@ -50,7 +50,8 @@ hardware_interface::return_type T265HardwareInterface::read()
   pipe_.poll_for_frames(&frameset);
   if (rs2::pose_frame pose_frame = frameset.first_or_default(RS2_STREAM_POSE)) {
     rs2_pose pose = pose_frame.get_pose_data();
-    std::cout << pose.velocity.x << "," << pose.velocity.y << "," << pose.velocity.z << std::endl;
+    nav_msgs::msg::Odometry odom;
+    toMsg(pose, "t265", "odom", rclcpp::Time(), odom);
   }
   return hardware_interface::return_type::OK;
 }
