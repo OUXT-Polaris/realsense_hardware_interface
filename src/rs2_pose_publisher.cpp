@@ -11,3 +11,31 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
+#include <realsense_hardware_interface/rs2_pose_publisher.hpp>
+
+namespace realsense_hardware_interface
+{
+controller_interface::return_type Rs2PosePublisher::init(const std::string & controller_name)
+{
+  return controller_interface::return_type::OK;
+}
+
+rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn Rs2PosePublisher::
+on_configure(
+  const rclcpp_lifecycle::State & /*previous_state*/)
+{
+  return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
+}
+
+controller_interface::return_type Rs2PosePublisher::update()
+{
+  return controller_interface::return_type::OK;
+}
+}  // realsense_hardware_interface
+
+#include "pluginlib/class_list_macros.hpp"
+
+PLUGINLIB_EXPORT_CLASS(
+  realsense_hardware_interface::Rs2PosePublisher,
+  controller_interface::ControllerInterface)

@@ -15,4 +15,66 @@
 #ifndef REALSENSE_HARDWARE_INTERFACE__RS2_POSE_PUBLISHER_HPP_
 #define REALSENSE_HARDWARE_INTERFACE__RS2_POSE_PUBLISHER_HPP_
 
+#include <realsense_hardware_interface/visibility_control.hpp>
+#include <realtime_tools/realtime_buffer.h>
+#include <realtime_tools/realtime_publisher.h>
+
+#include <controller_interface/controller_interface.hpp>
+#include <diagnostic_msgs/msg/diagnostic_array.hpp>
+#include <memory>
+#include <rclcpp/subscription.hpp>
+#include <rclcpp_lifecycle/node_interfaces/lifecycle_node_interface.hpp>
+#include <rclcpp_lifecycle/state.hpp>
+#include <string>
+#include <unordered_map>
+#include <vector>
+
+namespace realsense_hardware_interface
+{
+class Rs2PosePublisher : public controller_interface::ControllerInterface
+{
+public:
+  REALSENSE_HARDWARE_INTERFACE_PUBLIC
+  controller_interface::return_type init(const std::string & controller_name) override;
+
+  REALSENSE_HARDWARE_INTERFACE_PUBLIC
+  controller_interface::InterfaceConfiguration command_interface_configuration() const override
+  {
+    return controller_interface::InterfaceConfiguration{
+      controller_interface::interface_configuration_type::NONE};
+  }
+
+  REALSENSE_HARDWARE_INTERFACE_PUBLIC
+  controller_interface::InterfaceConfiguration state_interface_configuration() const override
+  {
+    std::vector<std::string> interface_names;
+    return controller_interface::InterfaceConfiguration{
+      controller_interface::interface_configuration_type::INDIVIDUAL, interface_names};
+  }
+
+  REALSENSE_HARDWARE_INTERFACE_PUBLIC
+  rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn on_configure(
+    const rclcpp_lifecycle::State & /*previous_state*/) override;
+
+  REALSENSE_HARDWARE_INTERFACE_PUBLIC
+  rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn on_activate(
+    const rclcpp_lifecycle::State & /*previous_state*/) override
+  {
+    return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
+  }
+
+  REALSENSE_HARDWARE_INTERFACE_PUBLIC
+  rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn on_deactivate(
+    const rclcpp_lifecycle::State & /*previous_state*/) override
+  {
+    return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
+  }
+
+  REALSENSE_HARDWARE_INTERFACE_PUBLIC
+  controller_interface::return_type update() override;
+
+private:
+};
+}  // realsense_hardware_interface
+
 #endif  // REALSENSE_HARDWARE_INTERFACE__RS2_POSE_PUBLISHER_HPP_

@@ -51,9 +51,26 @@ pluginlib_export_plugin_description_file(hardware_interface realsense_hardware_i
 add_library(realsense_controller_interface SHARED
   src/rs2_pose_publisher.cpp
 )
+target_include_directories(
+  realsense_controller_interface
+  PRIVATE
+  include
+)
+target_link_libraries(realsense_controller_interface
+  realsense2
+)
+ament_target_dependencies(realsense_controller_interface
+  controller_interface
+  pluginlib
+  rclcpp
+  ros2_control
+  realtime_tools
+  nav_msgs
+)
+pluginlib_export_plugin_description_file(controller_interface realsense_controller_interface.xml)
 
 ament_export_libraries(
-  realsense_hardware_interface
+  realsense_hardware_interface realsense_controller_interface
 )
 ament_export_dependencies(
   hardware_interface
@@ -65,7 +82,7 @@ ament_export_dependencies(
 )
 
 install(
-  TARGETS realsense_hardware_interface
+  TARGETS realsense_hardware_interface realsense_controller_interface
   DESTINATION lib
 )
 
