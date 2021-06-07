@@ -15,6 +15,7 @@
 #include <realsense_hardware_interface/t265_hardware_interface.hpp>
 
 #include <vector>
+#include <memory>
 
 namespace realsense_hardware_interface
 {

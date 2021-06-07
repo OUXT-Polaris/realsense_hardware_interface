@@ -20,6 +20,7 @@ find_package(pluginlib REQUIRED)
 find_package(realtime_tools REQUIRED)
 find_package(hardware_interface REQUIRED)
 find_package(nav_msgs REQUIRED)
+find_package(controller_interface REQUIRED)
 find_package(realsense2 REQUIRED)
 
 include_directories(
@@ -46,6 +47,10 @@ ament_target_dependencies(realsense_hardware_interface
   nav_msgs
 )
 pluginlib_export_plugin_description_file(hardware_interface realsense_hardware_interface.xml)
+
+add_library(realsense_controller_interface SHARED
+  src/rs2_pose_publisher.cpp
+)
 
 ament_export_libraries(
   realsense_hardware_interface

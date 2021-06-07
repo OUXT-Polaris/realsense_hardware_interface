@@ -22,6 +22,8 @@
 #include <geometry_msgs/msg/vector3.hpp>
 
 #include <string>
+#include <vector>
+#include <memory>
 
 namespace realsense_hardware_interface
 {
@@ -158,9 +160,9 @@ public:
     x(sensor_name, name + "::x", quat.x),
     y(sensor_name, name + "::y", quat.y),
     z(sensor_name, name + "::z", quat.z),
-    w(sensor_name, name + "::z", quat.w) 
-    {
-    }
+    w(sensor_name, name + "::z", quat.w)
+  {
+  }
   void appendStateInterface(std::vector<hardware_interface::StateInterface> & interfaces)
   {
     x.appendStateInterface(interfaces);
