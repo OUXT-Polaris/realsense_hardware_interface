@@ -2,10 +2,12 @@
 controller_manager:
   ros__parameters:
     update_rate: 100  # Hz
-  
+    
     rs2_pose_publisher:
       type: realsense_hardware_interface/Rs2PosePublisher
 
 rs2_pose_publisher:
   ros__parameters:
-    odom_topic : "/odom"
+    odom_topic : /odom
+    joint: t265_link
+    sensor_name: t265

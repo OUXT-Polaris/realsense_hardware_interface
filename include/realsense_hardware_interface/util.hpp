@@ -21,6 +21,8 @@
 #include <geometry_msgs/msg/twist.hpp>
 #include <geometry_msgs/msg/vector3.hpp>
 
+#include <hardware_interface/handle.hpp>
+
 #include <string>
 #include <vector>
 #include <memory>
@@ -87,6 +89,12 @@ public:
   {
     interfaces.emplace_back(hardware_interface::StateInterface(sensor_name, name, &value));
   }
+  void appendStateInterfaceNames(
+    const std::string & joint_name,
+    std::vector<std::string> & interface_names)
+  {
+    interface_names.emplace_back(joint_name + "/" + name);
+  }
   void setValue(double val)
   {
     value = val;
@@ -121,6 +129,14 @@ public:
     x.appendStateInterface(interfaces);
     y.appendStateInterface(interfaces);
     z.appendStateInterface(interfaces);
+  }
+  void appendStateInterfaceNames(
+    const std::string & joint_name,
+    std::vector<std::string> & interface_names)
+  {
+    x.appendStateInterfaceNames(joint_name, interface_names);
+    y.appendStateInterfaceNames(joint_name, interface_names);
+    z.appendStateInterfaceNames(joint_name, interface_names);
   }
   void setValue(const rs2_vector & vec)
   {
@@ -169,6 +185,15 @@ public:
     y.appendStateInterface(interfaces);
     z.appendStateInterface(interfaces);
     w.appendStateInterface(interfaces);
+  }
+  void appendStateInterfaceNames(
+    const std::string & joint_name,
+    std::vector<std::string> & interface_names)
+  {
+    x.appendStateInterfaceNames(joint_name, interface_names);
+    y.appendStateInterfaceNames(joint_name, interface_names);
+    z.appendStateInterfaceNames(joint_name, interface_names);
+    w.appendStateInterfaceNames(joint_name, interface_names);
   }
   void setValue(const rs2_quaternion & quat)
   {
@@ -226,6 +251,18 @@ public:
     angular_velocity.appendStateInterface(interfaces);
     tracker_confidence.appendStateInterface(interfaces);
     mapper_confidence.appendStateInterface(interfaces);
+  }
+  void appendStateInterfaceNames(
+    const std::string & joint_name,
+    std::vector<std::string> & interface_names)
+  {
+    translation.appendStateInterfaceNames(joint_name, interface_names);
+    velocity.appendStateInterfaceNames(joint_name, interface_names);
+    acceleration.appendStateInterfaceNames(joint_name, interface_names);
+    rotation.appendStateInterfaceNames(joint_name, interface_names);
+    angular_velocity.appendStateInterfaceNames(joint_name, interface_names);
+    tracker_confidence.appendStateInterfaceNames(joint_name, interface_names);
+    mapper_confidence.appendStateInterfaceNames(joint_name, interface_names);
   }
   void setValue(const rs2_pose & pose)
   {

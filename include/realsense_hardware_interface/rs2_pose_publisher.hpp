@@ -15,6 +15,7 @@
 #ifndef REALSENSE_HARDWARE_INTERFACE__RS2_POSE_PUBLISHER_HPP_
 #define REALSENSE_HARDWARE_INTERFACE__RS2_POSE_PUBLISHER_HPP_
 
+#include <realsense_hardware_interface/util.hpp>
 #include <realsense_hardware_interface/visibility_control.hpp>
 #include <realtime_tools/realtime_buffer.h>
 #include <realtime_tools/realtime_publisher.h>
@@ -47,7 +48,9 @@ public:
   REALSENSE_HARDWARE_INTERFACE_PUBLIC
   controller_interface::InterfaceConfiguration state_interface_configuration() const override
   {
-    std::vector<std::string> interface_names;
+    auto handle = Rs2PoseHandle(sensor_name_, "rs2_pose", rs2_pose());
+    std::vector<std::string> interface_names = {};
+    handle.appendStateInterfaceNames(joint_, interface_names);
     return controller_interface::InterfaceConfiguration{
       controller_interface::interface_configuration_type::INDIVIDUAL, interface_names};
   }
@@ -74,6 +77,8 @@ public:
   controller_interface::return_type update() override;
 
 private:
+  std::string joint_;
+  std::string sensor_name_;
 };
 }  // realsense_hardware_interface
 

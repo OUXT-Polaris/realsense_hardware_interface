@@ -18,6 +18,15 @@ namespace realsense_hardware_interface
 {
 controller_interface::return_type Rs2PosePublisher::init(const std::string & controller_name)
 {
+  auto ret = ControllerInterface::init(controller_name);
+  if (ret != controller_interface::return_type::OK) {
+    return ret;
+  }
+  auto node = get_node();
+  node->declare_parameter("joint");
+  joint_ = node->get_parameter("joint").as_string();
+  node->declare_parameter("sensor_name");
+  sensor_name_ = node->get_parameter("sensor_name").as_string();
   return controller_interface::return_type::OK;
 }
 

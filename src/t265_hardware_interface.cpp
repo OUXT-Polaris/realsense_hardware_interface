@@ -25,13 +25,17 @@ hardware_interface::return_type T265HardwareInterface::configure(
   if (configure_default(info) != hardware_interface::return_type::OK) {
     return hardware_interface::return_type::ERROR;
   }
+  if (info.joints.size() != 1) {
+    throw std::runtime_error("joint size should be 1");
+  }
+  joint_ = info.joints[0].name;
   return hardware_interface::return_type::OK;
 }
 
 std::vector<hardware_interface::StateInterface> T265HardwareInterface::export_state_interfaces()
 {
   std::vector<hardware_interface::StateInterface> interfaces = {};
-  pose_handle_ptr_ = std::make_shared<Rs2PoseHandle>("t265", "rs2_pose", rs2_pose());
+  pose_handle_ptr_ = std::make_shared<Rs2PoseHandle>(joint_, "rs2_pose", rs2_pose());
   pose_handle_ptr_->appendStateInterface(interfaces);
   return interfaces;
 }
