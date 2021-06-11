@@ -77,8 +77,9 @@ public:
 
 private:
   std::string joint_;
-  std::string sensor_name_;
+  std::string odom_frame_;
   std::shared_ptr<Rs2PoseHandle> handle_;
+  std::shared_ptr<rclcpp::Clock> clock_ptr_;
 };
 }  // namespace realsense_hardware_interface
 

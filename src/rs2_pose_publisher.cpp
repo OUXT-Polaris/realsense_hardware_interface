@@ -23,10 +23,11 @@ controller_interface::return_type Rs2PosePublisher::init(const std::string & con
     return ret;
   }
   auto node = get_node();
-  node->declare_parameter("joint");
+  clock_ptr_ = node->get_clock();
+  node->declare_parameter("joint", "");
   joint_ = node->get_parameter("joint").as_string();
-  node->declare_parameter("sensor_name");
-  sensor_name_ = node->get_parameter("sensor_name").as_string();
+  node->declare_parameter("odom_frame", "");
+  odom_frame_ = node->get_parameter("odom_frame").as_string();
   handle_ = std::make_shared<Rs2PoseHandle>(joint_, "rs2_pose", rs2_pose());
   return controller_interface::return_type::OK;
 }
@@ -40,6 +41,9 @@ Rs2PosePublisher::on_configure(const rclcpp_lifecycle::State & /*previous_state*
 controller_interface::return_type Rs2PosePublisher::update()
 {
   handle_->setValue(state_interfaces_);
+  const auto rs2_pose = handle_->getValue();
+  nav_msgs::msg::Odometry odom;
+  toMsg(rs2_pose, joint_, "odom", clock_ptr_->now(), odom);
   return controller_interface::return_type::OK;
 }
 }  // namespace realsense_hardware_interface
