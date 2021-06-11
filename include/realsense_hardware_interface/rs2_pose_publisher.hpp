@@ -78,8 +78,11 @@ public:
 private:
   std::string joint_;
   std::string odom_frame_;
+  std::string odom_topic_;
   std::shared_ptr<Rs2PoseHandle> handle_;
   std::shared_ptr<rclcpp::Clock> clock_ptr_;
+  rclcpp::Publisher<nav_msgs::msg::Odometry>::SharedPtr odom_pub_;
+  std::shared_ptr<realtime_tools::RealtimePublisher<nav_msgs::msg::Odometry>> odom_pub_realtime_;
 };
 }  // namespace realsense_hardware_interface
 

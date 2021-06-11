@@ -28,6 +28,8 @@ controller_interface::return_type Rs2PosePublisher::init(const std::string & con
   joint_ = node->get_parameter("joint").as_string();
   node->declare_parameter("odom_frame", "");
   odom_frame_ = node->get_parameter("odom_frame").as_string();
+  node->declare_parameter("odom_topic", "odom");
+  odom_topic_ = node->get_parameter("odom_topic").as_string();
   handle_ = std::make_shared<Rs2PoseHandle>(joint_, "rs2_pose", rs2_pose());
   return controller_interface::return_type::OK;
 }
@@ -35,6 +37,11 @@ controller_interface::return_type Rs2PosePublisher::init(const std::string & con
 rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
 Rs2PosePublisher::on_configure(const rclcpp_lifecycle::State & /*previous_state*/)
 {
+  auto node = get_node();
+  odom_pub_ =
+    node->create_publisher<nav_msgs::msg::Odometry>(odom_topic_, rclcpp::SystemDefaultsQoS());
+  odom_pub_realtime_ =
+    std::make_shared<realtime_tools::RealtimePublisher<nav_msgs::msg::Odometry>>(odom_pub_);
   return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
 }
 
@@ -44,6 +51,10 @@ controller_interface::return_type Rs2PosePublisher::update()
   const auto rs2_pose = handle_->getValue();
   nav_msgs::msg::Odometry odom;
   toMsg(rs2_pose, joint_, "odom", clock_ptr_->now(), odom);
+  if (odom_pub_realtime_->trylock()) {
+    odom_pub_realtime_->msg_ = odom;
+    odom_pub_realtime_->unlockAndPublish();
+  }
   return controller_interface::return_type::OK;
 }
 }  // namespace realsense_hardware_interface
