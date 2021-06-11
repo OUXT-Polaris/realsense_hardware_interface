@@ -48,9 +48,8 @@ public:
   REALSENSE_HARDWARE_INTERFACE_PUBLIC
   controller_interface::InterfaceConfiguration state_interface_configuration() const override
   {
-    auto handle = Rs2PoseHandle(sensor_name_, "rs2_pose", rs2_pose());
     std::vector<std::string> interface_names = {};
-    handle.appendStateInterfaceNames(joint_, interface_names);
+    handle_->appendStateInterfaceNames(joint_, interface_names);
     return controller_interface::InterfaceConfiguration{
       controller_interface::interface_configuration_type::INDIVIDUAL, interface_names};
   }
@@ -79,6 +78,8 @@ public:
 private:
   std::string joint_;
   std::string sensor_name_;
+  std::shared_ptr<Rs2PoseHandle> handle_;
+
 };
 }  // realsense_hardware_interface
 

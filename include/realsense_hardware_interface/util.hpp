@@ -21,6 +21,7 @@
 #include <geometry_msgs/msg/twist.hpp>
 #include <geometry_msgs/msg/vector3.hpp>
 
+#include <hardware_interface/loaned_state_interface.hpp>
 #include <hardware_interface/handle.hpp>
 
 #include <string>
@@ -72,6 +73,19 @@ void toMsg(
   toMsg(pose.velocity, pose.angular_velocity, msg.twist.twist);
 }
 
+double getState(
+  const std::string & joint_name, const std::string & interface_name,
+  const std::vector<hardware_interface::LoanedStateInterface> & interfaces)
+{
+  for (const auto & interface : interfaces) {
+    if (interface.get_name() == joint_name && interface.get_interface_name() == interface_name) {
+      return interface.get_value();
+    }
+  }
+  throw std::runtime_error(
+          "state interface : " + interface_name + " does not exist in : " + joint_name);
+}
+
 class DoubleDataHandle
 {
 public:
@@ -98,6 +112,10 @@ public:
   void setValue(double val)
   {
     value = val;
+  }
+  void setValue(const std::vector<hardware_interface::LoanedStateInterface> & interface)
+  {
+    value = getState(sensor_name, name, interface);
   }
   double getValue() const
   {
@@ -143,6 +161,12 @@ public:
     x.setValue(vec.x);
     y.setValue(vec.y);
     z.setValue(vec.z);
+  }
+  void setValue(const std::vector<hardware_interface::LoanedStateInterface> & interface)
+  {
+    x.setValue(interface);
+    y.setValue(interface);
+    z.setValue(interface);
   }
   const rs2_vector getValue() const
   {
@@ -202,6 +226,13 @@ public:
     z.setValue(quat.z);
     w.setValue(quat.w);
   }
+  void setValue(const std::vector<hardware_interface::LoanedStateInterface> & interface)
+  {
+    x.setValue(interface);
+    y.setValue(interface);
+    z.setValue(interface);
+    w.setValue(interface);
+  }
   const rs2_quaternion getValue() const
   {
     rs2_quaternion quat;
@@ -249,6 +280,7 @@ public:
     acceleration.appendStateInterface(interfaces);
     rotation.appendStateInterface(interfaces);
     angular_velocity.appendStateInterface(interfaces);
+    angular_acceleration.appendStateInterface(interfaces);
     tracker_confidence.appendStateInterface(interfaces);
     mapper_confidence.appendStateInterface(interfaces);
   }
@@ -261,6 +293,7 @@ public:
     acceleration.appendStateInterfaceNames(joint_name, interface_names);
     rotation.appendStateInterfaceNames(joint_name, interface_names);
     angular_velocity.appendStateInterfaceNames(joint_name, interface_names);
+    angular_acceleration.appendStateInterfaceNames(joint_name, interface_names);
     tracker_confidence.appendStateInterfaceNames(joint_name, interface_names);
     mapper_confidence.appendStateInterfaceNames(joint_name, interface_names);
   }
@@ -274,6 +307,17 @@ public:
     angular_acceleration.setValue(pose.angular_acceleration);
     tracker_confidence.setValue(pose.tracker_confidence);
     mapper_confidence.setValue(pose.mapper_confidence);
+  }
+  void setValue(const std::vector<hardware_interface::LoanedStateInterface> & interface)
+  {
+    translation.setValue(interface);
+    velocity.setValue(interface);
+    acceleration.setValue(interface);
+    rotation.setValue(interface);
+    angular_velocity.setValue(interface);
+    angular_acceleration.setValue(interface);
+    tracker_confidence.setValue(interface);
+    mapper_confidence.setValue(interface);
   }
   const rs2_pose getValue()
   {

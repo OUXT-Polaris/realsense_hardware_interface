@@ -27,6 +27,7 @@ controller_interface::return_type Rs2PosePublisher::init(const std::string & con
   joint_ = node->get_parameter("joint").as_string();
   node->declare_parameter("sensor_name");
   sensor_name_ = node->get_parameter("sensor_name").as_string();
+  handle_ = std::make_shared<Rs2PoseHandle>(joint_, "rs2_pose", rs2_pose());
   return controller_interface::return_type::OK;
 }
 
@@ -39,6 +40,7 @@ on_configure(
 
 controller_interface::return_type Rs2PosePublisher::update()
 {
+  handle_->setValue(state_interfaces_);
   return controller_interface::return_type::OK;
 }
 }  // realsense_hardware_interface
