@@ -12,10 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <realsense_hardware_interface/t265_hardware_interface.hpp>
-
-#include <vector>
 #include <memory>
+#include <realsense_hardware_interface/t265_hardware_interface.hpp>
+#include <vector>
 
 namespace realsense_hardware_interface
 {
@@ -37,7 +36,7 @@ std::vector<hardware_interface::StateInterface> T265HardwareInterface::export_st
   std::vector<hardware_interface::StateInterface> interfaces = {};
   pose_handle_ptr_ = std::make_shared<Rs2PoseHandle>(joint_, "rs2_pose", rs2_pose());
   pose_handle_ptr_->appendStateInterface(interfaces);
-  for(const auto interface : interfaces) {
+  for (const auto interface : interfaces) {
     std::cout << interface.get_name() << "/" << interface.get_interface_name() << std::endl;
   }
   return interfaces;

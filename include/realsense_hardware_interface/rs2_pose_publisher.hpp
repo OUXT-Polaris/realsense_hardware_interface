@@ -15,8 +15,6 @@
 #ifndef REALSENSE_HARDWARE_INTERFACE__RS2_POSE_PUBLISHER_HPP_
 #define REALSENSE_HARDWARE_INTERFACE__RS2_POSE_PUBLISHER_HPP_
 
-#include <realsense_hardware_interface/util.hpp>
-#include <realsense_hardware_interface/visibility_control.hpp>
 #include <realtime_tools/realtime_buffer.h>
 #include <realtime_tools/realtime_publisher.h>
 
@@ -26,6 +24,8 @@
 #include <rclcpp/subscription.hpp>
 #include <rclcpp_lifecycle/node_interfaces/lifecycle_node_interface.hpp>
 #include <rclcpp_lifecycle/state.hpp>
+#include <realsense_hardware_interface/util.hpp>
+#include <realsense_hardware_interface/visibility_control.hpp>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -79,8 +79,7 @@ private:
   std::string joint_;
   std::string sensor_name_;
   std::shared_ptr<Rs2PoseHandle> handle_;
-
 };
-}  // realsense_hardware_interface
+}  // namespace realsense_hardware_interface
 
 #endif  // REALSENSE_HARDWARE_INTERFACE__RS2_POSE_PUBLISHER_HPP_

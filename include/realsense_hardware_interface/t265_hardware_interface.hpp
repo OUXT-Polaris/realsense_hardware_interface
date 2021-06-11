@@ -22,17 +22,17 @@
 #include <hardware_interface/types/hardware_interface_return_values.hpp>
 #include <hardware_interface/types/hardware_interface_status_values.hpp>
 #include <librealsense2/rs.hpp>
+#include <memory>
 #include <rclcpp/rclcpp.hpp>
 #include <realsense_hardware_interface/util.hpp>
 #include <realsense_hardware_interface/visibility_control.hpp>
-#include <memory>
 #include <string>
 #include <vector>
 
 namespace realsense_hardware_interface
 {
 class T265HardwareInterface
-  : public hardware_interface::BaseInterface<hardware_interface::SensorInterface>
+: public hardware_interface::BaseInterface<hardware_interface::SensorInterface>
 {
 public:
   RCLCPP_SHARED_PTR_DEFINITIONS(T265HardwareInterface)
@@ -57,7 +57,7 @@ private:
   rs2::pipeline pipe_;
   rs2::config cfg_;
   std::shared_ptr<Rs2PoseHandle> pose_handle_ptr_;
-  template<typename T>
+  template <typename T>
   T getParameter(const std::string key, const hardware_interface::ComponentInfo & info) const
   {
     T param;
@@ -93,7 +93,7 @@ private:
       parameter = true;
     }
   }
-  template<typename T>
+  template <typename T>
   T getHardwareParameter(const std::string key) const
   {
     T param;

@@ -15,18 +15,16 @@
 #ifndef REALSENSE_HARDWARE_INTERFACE__UTIL_HPP_
 #define REALSENSE_HARDWARE_INTERFACE__UTIL_HPP_
 
-#include <rclcpp/rclcpp.hpp>
-#include <librealsense2/rs.hpp>
-#include <nav_msgs/msg/odometry.hpp>
 #include <geometry_msgs/msg/twist.hpp>
 #include <geometry_msgs/msg/vector3.hpp>
-
-#include <hardware_interface/loaned_state_interface.hpp>
 #include <hardware_interface/handle.hpp>
-
+#include <hardware_interface/loaned_state_interface.hpp>
+#include <librealsense2/rs.hpp>
+#include <memory>
+#include <nav_msgs/msg/odometry.hpp>
+#include <rclcpp/rclcpp.hpp>
 #include <string>
 #include <vector>
-#include <memory>
 
 namespace realsense_hardware_interface
 {
@@ -59,11 +57,8 @@ void toMsg(const rs2_vector & linear, const rs2_vector & angular, geometry_msgs:
 }
 
 void toMsg(
-  const rs2_pose & pose,
-  const std::string & realsense_frame,
-  const std::string & odom_frame,
-  const rclcpp::Time & time,
-  nav_msgs::msg::Odometry & msg)
+  const rs2_pose & pose, const std::string & realsense_frame, const std::string & odom_frame,
+  const rclcpp::Time & time, nav_msgs::msg::Odometry & msg)
 {
   msg.header.frame_id = odom_frame;
   msg.header.stamp = time;
@@ -83,7 +78,7 @@ double getState(
     }
   }
   throw std::runtime_error(
-          "state interface : " + interface_name + " does not exist in : " + joint_name);
+    "state interface : " + interface_name + " does not exist in : " + joint_name);
 }
 
 class DoubleDataHandle
@@ -98,29 +93,24 @@ private:
 public:
   DoubleDataHandle() = delete;
   DoubleDataHandle(const std::string & sensor_name, const std::string & name, double value)
-  : sensor_name(sensor_name), name(name), value(value) {}
+  : sensor_name(sensor_name), name(name), value(value)
+  {
+  }
   void appendStateInterface(std::vector<hardware_interface::StateInterface> & interfaces)
   {
     interfaces.emplace_back(hardware_interface::StateInterface(sensor_name, name, &value));
   }
   void appendStateInterfaceNames(
-    const std::string & joint_name,
-    std::vector<std::string> & interface_names)
+    const std::string & joint_name, std::vector<std::string> & interface_names)
   {
     interface_names.emplace_back(joint_name + "/" + name);
   }
-  void setValue(double val)
-  {
-    value = val;
-  }
+  void setValue(double val) { value = val; }
   void setValue(const std::vector<hardware_interface::LoanedStateInterface> & interface)
   {
     value = getState(sensor_name, name, interface);
   }
-  double getValue() const
-  {
-    return value;
-  }
+  double getValue() const { return value; }
 };
 
 class Rs2VectorHandle
@@ -141,7 +131,9 @@ public:
     name(name),
     x(sensor_name, name + "::x", vec.x),
     y(sensor_name, name + "::y", vec.y),
-    z(sensor_name, name + "::z", vec.z) {}
+    z(sensor_name, name + "::z", vec.z)
+  {
+  }
   void appendStateInterface(std::vector<hardware_interface::StateInterface> & interfaces)
   {
     x.appendStateInterface(interfaces);
@@ -149,8 +141,7 @@ public:
     z.appendStateInterface(interfaces);
   }
   void appendStateInterfaceNames(
-    const std::string & joint_name,
-    std::vector<std::string> & interface_names)
+    const std::string & joint_name, std::vector<std::string> & interface_names)
   {
     x.appendStateInterfaceNames(joint_name, interface_names);
     y.appendStateInterfaceNames(joint_name, interface_names);
@@ -193,8 +184,7 @@ private:
 public:
   Rs2QuaternionHandle() = delete;
   Rs2QuaternionHandle(
-    const std::string & sensor_name, const std::string & name,
-    const rs2_quaternion & quat)
+    const std::string & sensor_name, const std::string & name, const rs2_quaternion & quat)
   : sensor_name(sensor_name),
     name(name),
     x(sensor_name, name + "::x", quat.x),
@@ -211,8 +201,7 @@ public:
     w.appendStateInterface(interfaces);
   }
   void appendStateInterfaceNames(
-    const std::string & joint_name,
-    std::vector<std::string> & interface_names)
+    const std::string & joint_name, std::vector<std::string> & interface_names)
   {
     x.appendStateInterfaceNames(joint_name, interface_names);
     y.appendStateInterfaceNames(joint_name, interface_names);
@@ -272,7 +261,9 @@ public:
     angular_velocity(sensor_name, name + "::angular_velocity", pose.angular_velocity),
     angular_acceleration(sensor_name, name + "::angular_acceleration", pose.angular_acceleration),
     tracker_confidence(sensor_name, name + "::tracker_confidence", pose.tracker_confidence),
-    mapper_confidence(sensor_name, name + "::mapper_confidence", pose.mapper_confidence) {}
+    mapper_confidence(sensor_name, name + "::mapper_confidence", pose.mapper_confidence)
+  {
+  }
   void appendStateInterface(std::vector<hardware_interface::StateInterface> & interfaces)
   {
     translation.appendStateInterface(interfaces);
@@ -285,8 +276,7 @@ public:
     mapper_confidence.appendStateInterface(interfaces);
   }
   void appendStateInterfaceNames(
-    const std::string & joint_name,
-    std::vector<std::string> & interface_names)
+    const std::string & joint_name, std::vector<std::string> & interface_names)
   {
     translation.appendStateInterfaceNames(joint_name, interface_names);
     velocity.appendStateInterfaceNames(joint_name, interface_names);

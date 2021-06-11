@@ -31,9 +31,8 @@ controller_interface::return_type Rs2PosePublisher::init(const std::string & con
   return controller_interface::return_type::OK;
 }
 
-rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn Rs2PosePublisher::
-on_configure(
-  const rclcpp_lifecycle::State & /*previous_state*/)
+rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
+Rs2PosePublisher::on_configure(const rclcpp_lifecycle::State & /*previous_state*/)
 {
   return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
 }
@@ -43,10 +42,9 @@ controller_interface::return_type Rs2PosePublisher::update()
   handle_->setValue(state_interfaces_);
   return controller_interface::return_type::OK;
 }
-}  // realsense_hardware_interface
+}  // namespace realsense_hardware_interface
 
 #include "pluginlib/class_list_macros.hpp"
 
 PLUGINLIB_EXPORT_CLASS(
-  realsense_hardware_interface::Rs2PosePublisher,
-  controller_interface::ControllerInterface)
+  realsense_hardware_interface::Rs2PosePublisher, controller_interface::ControllerInterface)
