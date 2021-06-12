@@ -29,7 +29,6 @@
 #include <realsense_hardware_interface/visibility_control.hpp>
 #include <string>
 #include <tf2_msgs/msg/tf_message.hpp>
-#include <quaternion_operation/quaternion_operation.h>
 #include <unordered_map>
 #include <vector>
 

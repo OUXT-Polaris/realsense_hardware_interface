@@ -25,6 +25,7 @@
 #include <rclcpp/rclcpp.hpp>
 #include <string>
 #include <vector>
+#include <quaternion_operation/quaternion_operation.h>
 
 namespace realsense_hardware_interface
 {
@@ -37,23 +38,23 @@ void toMsg(const rs2_vector & point, geometry_msgs::msg::Point & msg)
 
 void toMsg(const rs2_quaternion & quat, geometry_msgs::msg::Quaternion & msg)
 {
-  msg.x = quat.x;
-  msg.y = quat.y;
-  msg.z = quat.z;
+  msg.x = quat.z * -1;
+  msg.y = quat.x * -1;
+  msg.z = quat.y;
   msg.w = quat.w;
 }
 
 void toMsg(const rs2_vector & vector, geometry_msgs::msg::Vector3 & msg)
 {
-  msg.x = vector.x;
-  msg.y = vector.y;
-  msg.z = vector.z;
+  msg.x = vector.z * -1;
+  msg.y = vector.x * -1;
+  msg.z = vector.y;
 }
 
 void toMsg(const rs2_vector & linear, const rs2_vector & angular, geometry_msgs::msg::Twist & msg)
 {
   toMsg(linear, msg.linear);
-  toMsg(angular, msg.linear);
+  toMsg(angular, msg.angular);
 }
 
 void toMsg(
