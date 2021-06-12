@@ -15,6 +15,8 @@
 #ifndef REALSENSE_HARDWARE_INTERFACE__UTIL_HPP_
 #define REALSENSE_HARDWARE_INTERFACE__UTIL_HPP_
 
+#include <quaternion_operation/quaternion_operation.h>
+
 #include <geometry_msgs/msg/twist.hpp>
 #include <geometry_msgs/msg/vector3.hpp>
 #include <hardware_interface/handle.hpp>
@@ -25,7 +27,6 @@
 #include <rclcpp/rclcpp.hpp>
 #include <string>
 #include <vector>
-#include <quaternion_operation/quaternion_operation.h>
 
 namespace realsense_hardware_interface
 {
