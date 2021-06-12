@@ -30,9 +30,9 @@ namespace realsense_hardware_interface
 {
 void toMsg(const rs2_vector & point, geometry_msgs::msg::Point & msg)
 {
-  msg.x = point.x;
-  msg.y = point.y;
-  msg.z = point.z;
+  msg.x = point.z * -1;
+  msg.y = point.x * -1;
+  msg.z = point.y;
 }
 
 void toMsg(const rs2_quaternion & quat, geometry_msgs::msg::Quaternion & msg)

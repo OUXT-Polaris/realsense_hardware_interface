@@ -16,7 +16,11 @@
   <depend>realtime_tools</depend>
   <depend>controller_interface</depend>
   <depend>hardware_interface</depend>
+  <depend>tf2_msgs</depend>
   <depend>nav_msgs</depend>
+  <depend>quaternion_operation</depend>
+
+  <exec_depend>rviz</exec_depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_cmake_gtest</test_depend>

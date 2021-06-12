@@ -56,7 +56,7 @@ def generate_launch_description():
                     '-d', str(
                         Path(get_package_share_directory('realsense_hardware_interface')) /
                         'config' /
-                        '2dof_robot_arm.rviz')])
+                        't265.rviz')])
     controller_config = os.path.join(
         get_package_share_directory("realsense_hardware_interface"),
         "config",
@@ -71,7 +71,6 @@ def generate_launch_description():
             "stderr": "screen",
         },
     )
-
     return launch.LaunchDescription(
         [
             robot_state_publisher,

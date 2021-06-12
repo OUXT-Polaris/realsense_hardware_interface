@@ -8,6 +8,7 @@ controller_manager:
 
 rs2_pose_publisher:
   ros__parameters:
-    odom_frame: odom_frame
+    odom_frame: odom
     odom_topic : /odom
     joint: t265_link
+    publish_tf: True

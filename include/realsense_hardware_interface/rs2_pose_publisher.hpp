@@ -20,6 +20,7 @@
 
 #include <controller_interface/controller_interface.hpp>
 #include <diagnostic_msgs/msg/diagnostic_array.hpp>
+#include <geometry_msgs/msg/transform_stamped.hpp>
 #include <memory>
 #include <rclcpp/subscription.hpp>
 #include <rclcpp_lifecycle/node_interfaces/lifecycle_node_interface.hpp>
@@ -27,6 +28,8 @@
 #include <realsense_hardware_interface/util.hpp>
 #include <realsense_hardware_interface/visibility_control.hpp>
 #include <string>
+#include <tf2_msgs/msg/tf_message.hpp>
+#include <quaternion_operation/quaternion_operation.h>
 #include <unordered_map>
 #include <vector>
 
@@ -79,10 +82,13 @@ private:
   std::string joint_;
   std::string odom_frame_;
   std::string odom_topic_;
+  bool publish_tf_;
   std::shared_ptr<Rs2PoseHandle> handle_;
   std::shared_ptr<rclcpp::Clock> clock_ptr_;
   rclcpp::Publisher<nav_msgs::msg::Odometry>::SharedPtr odom_pub_;
   std::shared_ptr<realtime_tools::RealtimePublisher<nav_msgs::msg::Odometry>> odom_pub_realtime_;
+  rclcpp::Publisher<tf2_msgs::msg::TFMessage>::SharedPtr tf_pub_;
+  std::shared_ptr<realtime_tools::RealtimePublisher<tf2_msgs::msg::TFMessage>> tf_pub_realtime_;
 };
 }  // namespace realsense_hardware_interface
 

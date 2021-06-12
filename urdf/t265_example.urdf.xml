@@ -1,12 +1,5 @@
 <robot name="test_robot">
-  <link name="base_link"/>
-
-  <joint name="t265_joint" type="fixed">
-    <parent link="base_link"/>
-    <child  link="t265_link"/>
-  </joint>
-  <link name="t265_link">
-  </link>
+  <link name="t265_link"/>
 
   <ros2_control name="t265_control" type="sensor">
     <hardware>

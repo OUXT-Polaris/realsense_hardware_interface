@@ -22,6 +22,8 @@ find_package(hardware_interface REQUIRED)
 find_package(nav_msgs REQUIRED)
 find_package(controller_interface REQUIRED)
 find_package(realsense2 REQUIRED)
+find_package(quaternion_operation REQUIRED)
+find_package(tf2_msgs REQUIRED)
 
 include_directories(
   include
@@ -45,6 +47,8 @@ ament_target_dependencies(realsense_hardware_interface
   ros2_control
   realtime_tools
   nav_msgs
+  tf2_msgs
+  quaternion_operation
 )
 pluginlib_export_plugin_description_file(hardware_interface realsense_hardware_interface.xml)
 
@@ -66,6 +70,8 @@ ament_target_dependencies(realsense_controller_interface
   ros2_control
   realtime_tools
   nav_msgs
+  tf2_msgs
+  quaternion_operation
 )
 pluginlib_export_plugin_description_file(controller_interface realsense_controller_interface.xml)
 
@@ -79,6 +85,8 @@ ament_export_dependencies(
   ros2_control
   realtime_tools
   nav_msgs
+  tf2_msgs
+  quaternion_operation
 )
 
 install(
