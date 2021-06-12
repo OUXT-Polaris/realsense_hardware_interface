@@ -6,7 +6,6 @@ Panels:
       Expanded:
         - /Global Options1
         - /Status1
-        - /TF1
       Splitter Ratio: 0.4588235318660736
     Tree Height: 1867
   - Class: rviz_common/Selection
@@ -60,18 +59,18 @@ Visualization Manager:
           Scale: 1
           Value: true
         Value: true
-      Enabled: false
-      Keep: 100
+      Enabled: true
+      Keep: 3
       Name: Odometry
       Position Tolerance: 0.10000000149011612
       Shape:
-        Alpha: 1
+        Alpha: 0.5
         Axes Length: 1
         Axes Radius: 0.10000000149011612
         Color: 255; 25; 0
         Head Length: 0.30000001192092896
         Head Radius: 0.10000000149011612
-        Shaft Length: 1
+        Shaft Length: 0.30000001192092896
         Shaft Radius: 0.05000000074505806
         Value: Arrow
       Topic:
@@ -80,7 +79,7 @@ Visualization Manager:
         History Policy: Keep Last
         Reliability Policy: Reliable
         Value: /odom
-      Value: false
+      Value: true
     - Class: rviz_default_plugins/TF
       Enabled: true
       Frame Timeout: 15
@@ -159,10 +158,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.1503983736038208
+      Pitch: 0.3253988027572632
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 1.9653972387313843
+      Yaw: 1.7403990030288696
     Saved: ~
 Window Geometry:
   Displays:

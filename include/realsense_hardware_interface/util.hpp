@@ -192,7 +192,7 @@ public:
     x(sensor_name, name + "::x", quat.x),
     y(sensor_name, name + "::y", quat.y),
     z(sensor_name, name + "::z", quat.z),
-    w(sensor_name, name + "::z", quat.w)
+    w(sensor_name, name + "::w", quat.w)
   {
   }
   void appendStateInterface(std::vector<hardware_interface::StateInterface> & interfaces)
