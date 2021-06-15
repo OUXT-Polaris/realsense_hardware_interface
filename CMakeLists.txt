@@ -24,6 +24,7 @@ find_package(controller_interface REQUIRED)
 find_package(realsense2 REQUIRED)
 find_package(quaternion_operation REQUIRED)
 find_package(tf2_msgs REQUIRED)
+find_package(Poco REQUIRED Foundation)
 
 include_directories(
   include
@@ -39,6 +40,7 @@ target_include_directories(
 )
 target_link_libraries(realsense_hardware_interface
   realsense2
+  Poco::Foundation
 )
 ament_target_dependencies(realsense_hardware_interface
   hardware_interface
@@ -62,6 +64,7 @@ target_include_directories(
 )
 target_link_libraries(realsense_controller_interface
   realsense2
+  Poco::Foundation
 )
 ament_target_dependencies(realsense_controller_interface
   controller_interface
