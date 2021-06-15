@@ -54,6 +54,7 @@ public:
 
 private:
   std::string joint_;
+  bool retrive_image_;
   rs2::pipeline pipe_;
   rs2::config cfg_;
   std::shared_ptr<Rs2PoseHandle> pose_handle_ptr_;

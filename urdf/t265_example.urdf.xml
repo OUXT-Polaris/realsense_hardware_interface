@@ -4,6 +4,7 @@
   <ros2_control name="t265_control" type="sensor">
     <hardware>
       <plugin>realsense_hardware_interface/T265HardwareInterface</plugin>
+      <param name="retrive_image">true</param>
     </hardware>
     <joint name="t265_link">
     </joint>

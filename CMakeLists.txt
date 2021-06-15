@@ -24,10 +24,15 @@ find_package(controller_interface REQUIRED)
 find_package(realsense2 REQUIRED)
 find_package(quaternion_operation REQUIRED)
 find_package(tf2_msgs REQUIRED)
+find_package(OpenCV REQUIRED)
+find_package(image_transport REQUIRED)
+find_package(sensor_msgs REQUIRED)
+find_package(cv_bridge REQUIRED)
 find_package(Poco REQUIRED Foundation)
 
 include_directories(
   include
+  ${OpenCV_INCLUDE_DIRS}
 )
 
 add_library(realsense_hardware_interface SHARED
@@ -37,10 +42,12 @@ target_include_directories(
   realsense_hardware_interface
   PRIVATE
   include
+  ${OpenCV_INCLUDE_DIRS}
 )
 target_link_libraries(realsense_hardware_interface
   realsense2
   Poco::Foundation
+  ${OpenCV_LIBRARIES}
 )
 ament_target_dependencies(realsense_hardware_interface
   hardware_interface
@@ -51,6 +58,11 @@ ament_target_dependencies(realsense_hardware_interface
   nav_msgs
   tf2_msgs
   quaternion_operation
+  image_transport
+  sensor_msgs
+  cv_bridge
+  Poco
+  OpenCV
 )
 pluginlib_export_plugin_description_file(hardware_interface realsense_hardware_interface.xml)
 
@@ -61,10 +73,12 @@ target_include_directories(
   realsense_controller_interface
   PRIVATE
   include
+  ${OpenCV_INCLUDE_DIRS}
 )
 target_link_libraries(realsense_controller_interface
   realsense2
   Poco::Foundation
+  ${OpenCV_LIBRARIES}
 )
 ament_target_dependencies(realsense_controller_interface
   controller_interface
@@ -75,6 +89,11 @@ ament_target_dependencies(realsense_controller_interface
   nav_msgs
   tf2_msgs
   quaternion_operation
+  image_transport
+  sensor_msgs
+  cv_bridge
+  Poco
+  OpenCV
 )
 pluginlib_export_plugin_description_file(controller_interface realsense_controller_interface.xml)
 
@@ -90,6 +109,11 @@ ament_export_dependencies(
   nav_msgs
   tf2_msgs
   quaternion_operation
+  image_transport
+  sensor_msgs
+  cv_bridge
+  Poco
+  OpenCV
 )
 
 install(

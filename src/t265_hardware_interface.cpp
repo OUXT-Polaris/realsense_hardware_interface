@@ -28,6 +28,7 @@ hardware_interface::return_type T265HardwareInterface::configure(
     throw std::runtime_error("joint size should be 1");
   }
   joint_ = info.joints[0].name;
+  retrive_image_ = getHardwareParameter<bool>("retrive_image");
   return hardware_interface::return_type::OK;
 }
 
@@ -42,6 +43,10 @@ std::vector<hardware_interface::StateInterface> T265HardwareInterface::export_st
 hardware_interface::return_type T265HardwareInterface::start()
 {
   cfg_.enable_stream(RS2_STREAM_POSE);
+  if (retrive_image_) {
+    cfg_.enable_stream(RS2_STREAM_FISHEYE, 1, RS2_FORMAT_Y8);
+    cfg_.enable_stream(RS2_STREAM_FISHEYE, 2, RS2_FORMAT_Y8);
+  }
   pipe_.start(cfg_);
   return hardware_interface::return_type::OK;
 }
@@ -57,6 +62,10 @@ hardware_interface::return_type T265HardwareInterface::read()
   pipe_.poll_for_frames(&frameset);
   if (rs2::pose_frame pose_frame = frameset.first_or_default(RS2_STREAM_POSE)) {
     pose_handle_ptr_->setValue(pose_frame.get_pose_data());
+  }
+  if (rs2::video_frame video_frame = frameset.first_or_default(RS2_STREAM_FISHEYE)) {
+    const auto image = frameToMat(video_frame);
+    std::cout << video_frame.get_sensor() << std::endl;
   }
   return hardware_interface::return_type::OK;
 }
