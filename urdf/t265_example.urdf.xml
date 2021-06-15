@@ -5,6 +5,8 @@
     <hardware>
       <plugin>realsense_hardware_interface/T265HardwareInterface</plugin>
       <param name="retrive_image">true</param>
+      <param name="left_image_key">t265_left_fisheye</param>
+      <param name="right_image_key">t265_right_fisheye</param>
     </hardware>
     <joint name="t265_link">
     </joint>

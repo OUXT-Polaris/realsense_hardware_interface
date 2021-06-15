@@ -14,6 +14,7 @@
 
 #include <memory>
 #include <realsense_hardware_interface/t265_hardware_interface.hpp>
+#include <Poco/SharedMemory.h>
 #include <vector>
 
 namespace realsense_hardware_interface
@@ -29,6 +30,8 @@ hardware_interface::return_type T265HardwareInterface::configure(
   }
   joint_ = info.joints[0].name;
   retrive_image_ = getHardwareParameter<bool>("retrive_image");
+  right_image_key_ = getHardwareParameter<std::string>("right_image_key");
+  left_image_key_ = getHardwareParameter<std::string>("left_image_key");
   return hardware_interface::return_type::OK;
 }
 

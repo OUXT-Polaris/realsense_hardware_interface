@@ -54,6 +54,8 @@ public:
 
 private:
   std::string joint_;
+  std::string left_image_key_;
+  std::string right_image_key_;
   bool retrive_image_;
   rs2::pipeline pipe_;
   rs2::config cfg_;
