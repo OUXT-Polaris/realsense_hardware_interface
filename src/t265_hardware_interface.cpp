@@ -63,9 +63,15 @@ hardware_interface::return_type T265HardwareInterface::read()
   if (rs2::pose_frame pose_frame = frameset.first_or_default(RS2_STREAM_POSE)) {
     pose_handle_ptr_->setValue(pose_frame.get_pose_data());
   }
-  if (rs2::video_frame video_frame = frameset.first_or_default(RS2_STREAM_FISHEYE)) {
-    const auto image = frameToMat(video_frame);
-    std::cout << video_frame.get_sensor() << std::endl;
+  if (retrive_image_) {
+    const auto frame_left = frameset.get_fisheye_frame(1);
+    const auto frame_right = frameset.get_fisheye_frame(2);
+    if(frame_left) {
+      const auto image_left = frameToMat(frame_left);
+    }
+    if(frame_right) {
+      const auto image_right = frameToMat(frame_right);
+    }
   }
   return hardware_interface::return_type::OK;
 }
