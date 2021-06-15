@@ -76,11 +76,11 @@ hardware_interface::return_type T265HardwareInterface::read()
     const auto frame_right = frameset.get_fisheye_frame(2);
     if (frame_left) {
       const auto image = frameToMat(frame_left);
-      memcpy(left_image_memory_ptr_->begin(), (void*)image.data, 848*800);
+      memcpy(left_image_memory_ptr_->begin(), (void *)image.data, 848 * 800);
     }
     if (frame_right) {
       const auto image = frameToMat(frame_right);
-      memcpy(right_image_memory_ptr_->begin(), (void*)image.data, 848*800);
+      memcpy(right_image_memory_ptr_->begin(), (void *)image.data, 848 * 800);
     }
   }
   return hardware_interface::return_type::OK;
