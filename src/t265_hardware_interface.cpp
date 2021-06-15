@@ -14,7 +14,6 @@
 
 #include <memory>
 #include <realsense_hardware_interface/t265_hardware_interface.hpp>
-#include <Poco/SharedMemory.h>
 #include <vector>
 
 namespace realsense_hardware_interface
@@ -30,8 +29,10 @@ hardware_interface::return_type T265HardwareInterface::configure(
   }
   joint_ = info.joints[0].name;
   retrive_image_ = getHardwareParameter<bool>("retrive_image");
-  right_image_key_ = getHardwareParameter<std::string>("right_image_key");
-  left_image_key_ = getHardwareParameter<std::string>("left_image_key");
+  if (retrive_image_) {
+    right_image_key_ = getHardwareParameter<std::string>("right_image_key");
+    left_image_key_ = getHardwareParameter<std::string>("left_image_key");
+  }
   return hardware_interface::return_type::OK;
 }
 
@@ -49,6 +50,10 @@ hardware_interface::return_type T265HardwareInterface::start()
   if (retrive_image_) {
     cfg_.enable_stream(RS2_STREAM_FISHEYE, 1, RS2_FORMAT_Y8);
     cfg_.enable_stream(RS2_STREAM_FISHEYE, 2, RS2_FORMAT_Y8);
+    right_image_memory_ptr_ = std::make_shared<Poco::SharedMemory>(
+      right_image_key_, 848 * 800, Poco::SharedMemory::AccessMode::AM_WRITE);
+    left_image_memory_ptr_ = std::make_shared<Poco::SharedMemory>(
+      left_image_key_, 848 * 800, Poco::SharedMemory::AccessMode::AM_WRITE);
   }
   pipe_.start(cfg_);
   return hardware_interface::return_type::OK;
@@ -69,11 +74,13 @@ hardware_interface::return_type T265HardwareInterface::read()
   if (retrive_image_) {
     const auto frame_left = frameset.get_fisheye_frame(1);
     const auto frame_right = frameset.get_fisheye_frame(2);
-    if(frame_left) {
-      const auto image_left = frameToMat(frame_left);
+    if (frame_left) {
+      const auto image = frameToMat(frame_left);
+      memcpy(left_image_memory_ptr_->begin(), (void*)image.data, 848*800);
     }
-    if(frame_right) {
-      const auto image_right = frameToMat(frame_right);
+    if (frame_right) {
+      const auto image = frameToMat(frame_right);
+      memcpy(right_image_memory_ptr_->begin(), (void*)image.data, 848*800);
     }
   }
   return hardware_interface::return_type::OK;

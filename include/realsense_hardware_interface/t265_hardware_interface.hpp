@@ -15,6 +15,8 @@
 #ifndef REALSENSE_HARDWARE_INTERFACE__T265_HARDWARE_INTERFACE_HPP_
 #define REALSENSE_HARDWARE_INTERFACE__T265_HARDWARE_INTERFACE_HPP_
 
+#include <Poco/SharedMemory.h>
+
 #include <hardware_interface/base_interface.hpp>
 #include <hardware_interface/handle.hpp>
 #include <hardware_interface/hardware_info.hpp>
@@ -60,6 +62,8 @@ private:
   rs2::pipeline pipe_;
   rs2::config cfg_;
   std::shared_ptr<Rs2PoseHandle> pose_handle_ptr_;
+  std::shared_ptr<Poco::SharedMemory> right_image_memory_ptr_;
+  std::shared_ptr<Poco::SharedMemory> left_image_memory_ptr_;
   template <typename T>
   T getParameter(const std::string key, const hardware_interface::ComponentInfo & info) const
   {
