@@ -81,7 +81,7 @@ private:
   std::string optical_frame_;
   std::string image_topic_;
   std::string camera_type_;
-  std::string shared_memoty_key_;
+  std::string shared_memory_key_;
   std::shared_ptr<rclcpp::Clock> clock_ptr_;
   std::shared_ptr<Poco::SharedMemory> image_memory_ptr_;
 };

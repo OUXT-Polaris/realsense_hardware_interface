@@ -85,6 +85,15 @@ def generate_launch_description():
                     "rs2_pose_publisher"],
                 output="screen",
                 shell=True,
+            ),
+            ExecuteProcess(
+                cmd=[
+                    "ros2",
+                    "control",
+                    "load_start_controller",
+                    "right_image_publisher"],
+                output="screen",
+                shell=True,
             )
         ]
     )

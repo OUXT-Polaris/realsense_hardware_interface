@@ -295,10 +295,10 @@ cv::Mat depthFrameToMeters(const rs2::depth_frame & f)
 
 std::size_t getImageMatSize(const std::string & camera_type)
 {
-  return getImageMatHeight(camera_type) * getImageMatWidth(camera_type);
+  return getImageMatCols(camera_type) * getImageMatRows(camera_type);
 }
 
-std::size_t getImageMatHeight(const std::string & camera_type)
+std::size_t getImageMatCols(const std::string & camera_type)
 {
   if (camera_type == "t265_fisheye") {
     return 848;
@@ -306,7 +306,7 @@ std::size_t getImageMatHeight(const std::string & camera_type)
   throw std::runtime_error("camera_type : " + camera_type + " does not support.");
 }
 
-std::size_t getImageMatWidth(const std::string & camera_type)
+std::size_t getImageMatRows(const std::string & camera_type)
 {
   if (camera_type == "t265_fisheye") {
     return 800;

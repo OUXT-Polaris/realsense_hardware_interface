@@ -32,6 +32,8 @@ controller_interface::return_type Rs2ImagePublisher::init(const std::string & co
   image_topic_ = node->get_parameter("image_topic").as_string();
   node->declare_parameter("camera_type", "");
   camera_type_ = node->get_parameter("camera_type").as_string();
+  node->declare_parameter("shared_memory_key", "");
+  shared_memory_key_ = node->get_parameter("shared_memory_key").as_string();
   return controller_interface::return_type::OK;
 }
 
@@ -40,14 +42,14 @@ Rs2ImagePublisher::on_configure(const rclcpp_lifecycle::State & /*previous_state
 {
   auto node = get_node();
   image_memory_ptr_ = std::make_shared<Poco::SharedMemory>(
-    shared_memoty_key_, getImageMatSize(camera_type_), Poco::SharedMemory::AccessMode::AM_WRITE);
+    shared_memory_key_, getImageMatSize(camera_type_), Poco::SharedMemory::AccessMode::AM_WRITE);
   return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
 }
 
 controller_interface::return_type Rs2ImagePublisher::update()
 {
   const auto image = cv::Mat(
-    cv::Size(getImageMatWidth(camera_type_), getImageMatHeight(camera_type_)), CV_8UC1,
+    cv::Size(getImageMatCols(camera_type_), getImageMatRows(camera_type_)), CV_8U,
     image_memory_ptr_->begin());
   return controller_interface::return_type::OK;
 }
