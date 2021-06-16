@@ -16,6 +16,7 @@
 #define REALSENSE_HARDWARE_INTERFACE__RS2_IMAGE_PUBLISHER_HPP_
 
 #include <Poco/SharedMemory.h>
+#include <cv_bridge/cv_bridge.h>
 #include <realtime_tools/realtime_buffer.h>
 #include <realtime_tools/realtime_publisher.h>
 
@@ -28,6 +29,7 @@
 #include <rclcpp_lifecycle/state.hpp>
 #include <realsense_hardware_interface/util.hpp>
 #include <realsense_hardware_interface/visibility_control.hpp>
+#include <sensor_msgs/msg/image.hpp>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -77,6 +79,9 @@ public:
   controller_interface::return_type update() override;
 
 private:
+  void publishImage();
+  double publish_rate_;
+  double update_duration_;
   std::string joint_;
   std::string optical_frame_;
   std::string image_topic_;
@@ -84,6 +89,10 @@ private:
   std::string shared_memory_key_;
   std::shared_ptr<rclcpp::Clock> clock_ptr_;
   std::shared_ptr<Poco::SharedMemory> image_memory_ptr_;
+  double configure_time_;
+  double next_update_time_;
+  rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr image_pub_;
+  std::shared_ptr<realtime_tools::RealtimePublisher<sensor_msgs::msg::Image>> image_pub_realtime_;
 };
 }  // namespace realsense_hardware_interface
 

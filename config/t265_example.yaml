@@ -24,6 +24,7 @@ right_image_publisher:
     image_topic: /t265/right_image
     camera_type: t265_fisheye
     shared_memory_key: t265_left_fisheye
+    publish_rate: 30.0
 
 left_image_publisher:
   ros__parameters:
@@ -32,3 +33,4 @@ left_image_publisher:
     image_topic: /t265/left_image
     camera_type: t265_fisheye
     shared_memory_key: t265_right_fisheye
+    publish_rate: 30.0
