@@ -146,6 +146,12 @@ cv::Mat frameToMat(const rs2::frame & f);
 // Converts depth frame to a matrix of doubles with distances in meters
 cv::Mat depthFrameToMeters(const rs2::depth_frame & f);
 
+std::size_t getImageMatSize(const std::string & camera_type);
+
+std::size_t getImageMatHeight(const std::string & camera_type);
+
+std::size_t getImageMatWidth(const std::string & camera_type);
+
 }  // namespace realsense_hardware_interface
 
 #endif  // REALSENSE_HARDWARE_INTERFACE__UTIL_HPP_

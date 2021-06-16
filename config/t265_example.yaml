@@ -22,9 +22,13 @@ right_image_publisher:
     joint: t265_link
     optical_frame: t265_optical_link
     image_topic: /t265/right_image
+    camera_type: t265_fisheye
+    shared_memory_key: t265_left_fisheye
 
 left_image_publisher:
   ros__parameters:
     joint: t265_link
     optical_frame: t265_optical_link
     image_topic: /t265/left_image
+    camera_type: t265_fisheye
+    shared_memory_key: t265_right_fisheye

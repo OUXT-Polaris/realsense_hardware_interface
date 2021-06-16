@@ -15,6 +15,7 @@
 #ifndef REALSENSE_HARDWARE_INTERFACE__RS2_IMAGE_PUBLISHER_HPP_
 #define REALSENSE_HARDWARE_INTERFACE__RS2_IMAGE_PUBLISHER_HPP_
 
+#include <Poco/SharedMemory.h>
 #include <realtime_tools/realtime_buffer.h>
 #include <realtime_tools/realtime_publisher.h>
 
@@ -79,7 +80,10 @@ private:
   std::string joint_;
   std::string optical_frame_;
   std::string image_topic_;
+  std::string camera_type_;
+  std::string shared_memoty_key_;
   std::shared_ptr<rclcpp::Clock> clock_ptr_;
+  std::shared_ptr<Poco::SharedMemory> image_memory_ptr_;
 };
 }  // namespace realsense_hardware_interface
 

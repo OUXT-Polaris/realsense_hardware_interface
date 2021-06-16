@@ -51,9 +51,9 @@ hardware_interface::return_type T265HardwareInterface::start()
     cfg_.enable_stream(RS2_STREAM_FISHEYE, 1, RS2_FORMAT_Y8);
     cfg_.enable_stream(RS2_STREAM_FISHEYE, 2, RS2_FORMAT_Y8);
     right_image_memory_ptr_ = std::make_shared<Poco::SharedMemory>(
-      right_image_key_, 848 * 800, Poco::SharedMemory::AccessMode::AM_WRITE);
+      right_image_key_, getImageMatSize("t265_fisheye"), Poco::SharedMemory::AccessMode::AM_WRITE);
     left_image_memory_ptr_ = std::make_shared<Poco::SharedMemory>(
-      left_image_key_, 848 * 800, Poco::SharedMemory::AccessMode::AM_WRITE);
+      left_image_key_, getImageMatSize("t265_fisheye"), Poco::SharedMemory::AccessMode::AM_WRITE);
   }
   pipe_.start(cfg_);
   return hardware_interface::return_type::OK;
@@ -76,11 +76,11 @@ hardware_interface::return_type T265HardwareInterface::read()
     const auto frame_right = frameset.get_fisheye_frame(2);
     if (frame_left) {
       const auto image = frameToMat(frame_left);
-      memcpy(left_image_memory_ptr_->begin(), (void *)image.data, 848 * 800);
+      memcpy(left_image_memory_ptr_->begin(), (void *)image.data, getImageMatSize("t265_fisheye"));
     }
     if (frame_right) {
       const auto image = frameToMat(frame_right);
-      memcpy(right_image_memory_ptr_->begin(), (void *)image.data, 848 * 800);
+      memcpy(right_image_memory_ptr_->begin(), (void *)image.data, getImageMatSize("t265_fisheye"));
     }
   }
   return hardware_interface::return_type::OK;

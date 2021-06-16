@@ -30,6 +30,8 @@ controller_interface::return_type Rs2ImagePublisher::init(const std::string & co
   optical_frame_ = node->get_parameter("optical_frame").as_string();
   node->declare_parameter("image_topic", "");
   image_topic_ = node->get_parameter("image_topic").as_string();
+  node->declare_parameter("camera_type", "");
+  camera_type_ = node->get_parameter("camera_type").as_string();
   return controller_interface::return_type::OK;
 }
 
@@ -37,11 +39,16 @@ rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
 Rs2ImagePublisher::on_configure(const rclcpp_lifecycle::State & /*previous_state*/)
 {
   auto node = get_node();
+  image_memory_ptr_ = std::make_shared<Poco::SharedMemory>(
+    shared_memoty_key_, getImageMatSize(camera_type_), Poco::SharedMemory::AccessMode::AM_WRITE);
   return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
 }
 
 controller_interface::return_type Rs2ImagePublisher::update()
 {
+  const auto image = cv::Mat(
+    cv::Size(getImageMatWidth(camera_type_), getImageMatHeight(camera_type_)), CV_8UC1,
+    image_memory_ptr_->begin());
   return controller_interface::return_type::OK;
 }
 }  // namespace realsense_hardware_interface

@@ -293,4 +293,25 @@ cv::Mat depthFrameToMeters(const rs2::depth_frame & f)
   return dm;
 }
 
+std::size_t getImageMatSize(const std::string & camera_type)
+{
+  return getImageMatHeight(camera_type) * getImageMatWidth(camera_type);
+}
+
+std::size_t getImageMatHeight(const std::string & camera_type)
+{
+  if (camera_type == "t265_fisheye") {
+    return 848;
+  }
+  throw std::runtime_error("camera_type : " + camera_type + " does not support.");
+}
+
+std::size_t getImageMatWidth(const std::string & camera_type)
+{
+  if (camera_type == "t265_fisheye") {
+    return 800;
+  }
+  throw std::runtime_error("camera_type : " + camera_type + " does not support.");
+}
+
 }  // namespace realsense_hardware_interface
