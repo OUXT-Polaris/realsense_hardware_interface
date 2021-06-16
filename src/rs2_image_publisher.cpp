@@ -26,6 +26,10 @@ controller_interface::return_type Rs2ImagePublisher::init(const std::string & co
   clock_ptr_ = node->get_clock();
   node->declare_parameter("joint", "");
   joint_ = node->get_parameter("joint").as_string();
+  node->declare_parameter("optical_frame", "");
+  optical_frame_ = node->get_parameter("optical_frame").as_string();
+  node->declare_parameter("image_topic", "");
+  image_topic_ = node->get_parameter("image_topic").as_string();
   return controller_interface::return_type::OK;
 }
 

@@ -1,6 +1,13 @@
 <robot name="test_robot">
   <link name="t265_link"/>
 
+  <link name="t265_optical_link"/>
+  <joint name="t265_optical_joint" type="fixed">
+    <parent link="t265_link"/>
+    <child link="t265_optical_link"/>
+    <origin rpy="-1.57079632679 0 -1.57079632679" xyz="0 0 0"/>
+  </joint>
+
   <ros2_control name="t265_control" type="sensor">
     <hardware>
       <plugin>realsense_hardware_interface/T265HardwareInterface</plugin>

@@ -5,6 +5,10 @@ controller_manager:
     
     rs2_pose_publisher:
       type: realsense_hardware_interface/Rs2PosePublisher
+    left_image_publisher:
+      type: realsense_hardware_interface/Rs2ImagePublisher
+    right_image_publisher:
+      type: realsense_hardware_interface/Rs2ImagePublisher
 
 rs2_pose_publisher:
   ros__parameters:
@@ -12,3 +16,15 @@ rs2_pose_publisher:
     odom_topic : /odom
     joint: t265_link
     publish_tf: True
+
+right_image_publisher:
+  ros__parameters:
+    joint: t265_link
+    optical_frame: t265_optical_link
+    image_topic: /t265/right_image
+
+left_image_publisher:
+  ros__parameters:
+    joint: t265_link
+    optical_frame: t265_optical_link
+    image_topic: /t265/left_image

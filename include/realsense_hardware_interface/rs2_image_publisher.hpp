@@ -77,6 +77,8 @@ public:
 
 private:
   std::string joint_;
+  std::string optical_frame_;
+  std::string image_topic_;
   std::shared_ptr<rclcpp::Clock> clock_ptr_;
 };
 }  // namespace realsense_hardware_interface
