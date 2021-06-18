@@ -93,6 +93,7 @@ private:
   double next_update_time_;
   rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr image_pub_;
   std::shared_ptr<realtime_tools::RealtimePublisher<sensor_msgs::msg::Image>> image_pub_realtime_;
+  std::string qos_;
 };
 }  // namespace realsense_hardware_interface
 

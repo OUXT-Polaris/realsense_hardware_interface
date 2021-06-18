@@ -37,6 +37,9 @@ controller_interface::return_type Rs2ImagePublisher::init(const std::string & co
   node->declare_parameter("publish_rate", 30.0);
   publish_rate_ = node->get_parameter("publish_rate").as_double();
   update_duration_ = 1.0 / publish_rate_;
+  std::string qos;
+  node->declare_parameter("qos", "sensor");
+  qos_ = node->get_parameter("qos").as_string();
   return controller_interface::return_type::OK;
 }
 
@@ -48,8 +51,15 @@ Rs2ImagePublisher::on_configure(const rclcpp_lifecycle::State & /*previous_state
   next_update_time_ = configure_time_ + update_duration_;
   image_memory_ptr_ = std::make_shared<Poco::SharedMemory>(
     shared_memory_key_, getImageMatSize(camera_type_), Poco::SharedMemory::AccessMode::AM_WRITE);
-  image_pub_ =
-    node->create_publisher<sensor_msgs::msg::Image>(image_topic_, rclcpp::SensorDataQoS());
+  if (qos_ == "sensor") {
+    image_pub_ =
+      node->create_publisher<sensor_msgs::msg::Image>(image_topic_, rclcpp::SensorDataQoS());
+  } else if (qos == "system_default") {
+    image_pub_ =
+      node->create_publisher<sensor_msgs::msg::Image>(image_topic_, rclcpp::SystemDefaultsQoS());
+  } else {
+    throw std::runtime_error("invalid qos setting : " + qos);
+  }
   image_pub_realtime_ =
     std::make_shared<realtime_tools::RealtimePublisher<sensor_msgs::msg::Image>>(image_pub_);
   return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
@@ -67,7 +77,7 @@ void Rs2ImagePublisher::publishImage()
   header.stamp = now;
   sensor_msgs::msg::Image::SharedPtr image_msg =
     cv_bridge::CvImage(header, "mono8", image).toImageMsg();
-  if(image_pub_realtime_->trylock()) {
+  if (image_pub_realtime_->trylock()) {
     image_pub_realtime_->msg_ = *image_msg;
     image_pub_realtime_->unlockAndPublish();
   }
