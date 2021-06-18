@@ -58,7 +58,7 @@ Rs2ImagePublisher::on_configure(const rclcpp_lifecycle::State & /*previous_state
     image_pub_ =
       node->create_publisher<sensor_msgs::msg::Image>(image_topic_, rclcpp::SystemDefaultsQoS());
   } else {
-    throw std::runtime_error("invalid qos setting : " + qos);
+    throw std::runtime_error("invalid qos setting : " + qos_);
   }
   image_pub_realtime_ =
     std::make_shared<realtime_tools::RealtimePublisher<sensor_msgs::msg::Image>>(image_pub_);
