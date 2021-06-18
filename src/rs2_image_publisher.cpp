@@ -54,7 +54,7 @@ Rs2ImagePublisher::on_configure(const rclcpp_lifecycle::State & /*previous_state
   if (qos_ == "sensor") {
     image_pub_ =
       node->create_publisher<sensor_msgs::msg::Image>(image_topic_, rclcpp::SensorDataQoS());
-  } else if (qos == "system_default") {
+  } else if (qos_ == "system_default") {
     image_pub_ =
       node->create_publisher<sensor_msgs::msg::Image>(image_topic_, rclcpp::SystemDefaultsQoS());
   } else {
