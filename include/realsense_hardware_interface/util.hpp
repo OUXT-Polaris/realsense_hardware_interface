@@ -28,6 +28,7 @@
 #include <opencv2/opencv.hpp>  // Include OpenCV API
 #include <rclcpp/rclcpp.hpp>
 #include <string>
+#include <sensor_msgs/msg/image.hpp>
 #include <vector>
 
 namespace realsense_hardware_interface
@@ -151,6 +152,8 @@ std::size_t getImageMatSize(const std::string & camera_type);
 std::size_t getImageMatCols(const std::string & camera_type);
 
 std::size_t getImageMatRows(const std::string & camera_type);
+
+std::string getImageEncording(const std::string & camera_type);
 
 }  // namespace realsense_hardware_interface
 

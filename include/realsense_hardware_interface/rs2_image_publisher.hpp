@@ -79,6 +79,7 @@ public:
   controller_interface::return_type update() override;
 
 private:
+  const cv::Mat encode(const cv::Mat & image);
   void publishImage();
   double publish_rate_;
   double update_duration_;
@@ -94,6 +95,7 @@ private:
   rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr image_pub_;
   std::shared_ptr<realtime_tools::RealtimePublisher<sensor_msgs::msg::Image>> image_pub_realtime_;
   std::string qos_;
+  std::string encoding_;
 };
 }  // namespace realsense_hardware_interface
 

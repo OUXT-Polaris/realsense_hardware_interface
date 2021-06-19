@@ -40,6 +40,8 @@ controller_interface::return_type Rs2ImagePublisher::init(const std::string & co
   std::string qos;
   node->declare_parameter("qos", "sensor");
   qos_ = node->get_parameter("qos").as_string();
+  node->declare_parameter("encoding", "rgb8");
+  encoding_ = node->get_parameter("encoding").as_string();
   return controller_interface::return_type::OK;
 }
 
@@ -65,18 +67,33 @@ Rs2ImagePublisher::on_configure(const rclcpp_lifecycle::State & /*previous_state
   return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
 }
 
+const cv::Mat Rs2ImagePublisher::encode(const cv::Mat & image)
+{
+  const auto from = getImageEncording(camera_type_);
+  if(from == encoding_) {
+    return image;
+  }
+  if(from == "mono8" && encoding_ == "rgb8") {
+    cv::Mat converted;
+    cv::cvtColor(image, converted, cv::COLOR_GRAY2BGR);
+    return converted;
+  }
+  throw std::runtime_error("numupported image encoding conversion.");
+}
+
 void Rs2ImagePublisher::publishImage()
 {
   auto node = get_node();
   const auto now = node->get_clock()->now();
-  const auto image = cv::Mat(
+  auto image = cv::Mat(
     cv::Size(getImageMatCols(camera_type_), getImageMatRows(camera_type_)), CV_8U,
     image_memory_ptr_->begin());
+  image = encode(image);
   std_msgs::msg::Header header;
   header.frame_id = optical_frame_;
   header.stamp = now;
   sensor_msgs::msg::Image::SharedPtr image_msg =
-    cv_bridge::CvImage(header, "mono8", image).toImageMsg();
+    cv_bridge::CvImage(header, encoding_, image).toImageMsg();
   if (image_pub_realtime_->trylock()) {
     image_pub_realtime_->msg_ = *image_msg;
     image_pub_realtime_->unlockAndPublish();

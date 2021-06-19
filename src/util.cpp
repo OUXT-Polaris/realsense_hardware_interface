@@ -314,4 +314,12 @@ std::size_t getImageMatRows(const std::string & camera_type)
   throw std::runtime_error("camera_type : " + camera_type + " does not support.");
 }
 
+std::string getImageEncording(const std::string & camera_type)
+{
+  if (camera_type == "t265_fisheye") {
+    return "mono8";
+  }
+  throw std::runtime_error("camera_type : " + camera_type + " does not support.");
+}
+
 }  // namespace realsense_hardware_interface
