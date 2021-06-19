@@ -27,8 +27,8 @@
 #include <nav_msgs/msg/odometry.hpp>
 #include <opencv2/opencv.hpp>  // Include OpenCV API
 #include <rclcpp/rclcpp.hpp>
-#include <string>
 #include <sensor_msgs/msg/image.hpp>
+#include <string>
 #include <vector>
 
 namespace realsense_hardware_interface

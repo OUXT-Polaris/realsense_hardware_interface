@@ -70,10 +70,10 @@ Rs2ImagePublisher::on_configure(const rclcpp_lifecycle::State & /*previous_state
 const cv::Mat Rs2ImagePublisher::encode(const cv::Mat & image)
 {
   const auto from = getImageEncording(camera_type_);
-  if(from == encoding_) {
+  if (from == encoding_) {
     return image;
   }
-  if(from == "mono8" && encoding_ == "rgb8") {
+  if (from == "mono8" && encoding_ == "rgb8") {
     cv::Mat converted;
     cv::cvtColor(image, converted, cv::COLOR_GRAY2BGR);
     return converted;
