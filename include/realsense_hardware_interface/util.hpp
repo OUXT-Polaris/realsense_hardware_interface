@@ -155,6 +155,8 @@ std::size_t getImageMatRows(const std::string & camera_type);
 
 std::string getImageEncording(const std::string & camera_type);
 
+void getRealsenseDeviceLiet();
+const std::string getDeviceName(const rs2::device & dev);
 }  // namespace realsense_hardware_interface
 
 #endif  // REALSENSE_HARDWARE_INTERFACE__UTIL_HPP_

@@ -34,6 +34,7 @@ hardware_interface::return_type T265HardwareInterface::configure(
     left_image_key_ = getHardwareParameter<std::string>("left_image_key");
   }
   serial_ = getHardwareParameter<std::string>("serial");
+  getRealsenseDeviceLiet();
   return hardware_interface::return_type::OK;
 }
 

@@ -322,4 +322,34 @@ std::string getImageEncording(const std::string & camera_type)
   throw std::runtime_error("camera_type : " + camera_type + " does not support.");
 }
 
+void getRealsenseDeviceLiet()
+{
+  rs2::context ctx;
+  rs2::device_list devices = ctx.query_devices();
+  rs2::device selected_device;
+  if (devices.size() == 0) {
+    throw std::runtime_error("failed to query realsense device");
+  } else {
+    RCLCPP_INFO_STREAM(
+      rclcpp::get_logger("realsense_hardware_interface"), "found realsense device");
+    for (const auto & device : devices) {
+      RCLCPP_INFO_STREAM(rclcpp::get_logger("realsense_hardware_interface"), getDeviceName(device));
+    }
+  }
+}
+
+const std::string getDeviceName(const rs2::device & dev)
+{
+  // Each device provides some information on itself, such as name:
+  std::string name = "Unknown Device";
+  if (dev.supports(RS2_CAMERA_INFO_NAME)) name = dev.get_info(RS2_CAMERA_INFO_NAME);
+
+  // and the serial number of the device:
+  std::string sn = "########";
+  if (dev.supports(RS2_CAMERA_INFO_SERIAL_NUMBER))
+    sn = std::string("#") + dev.get_info(RS2_CAMERA_INFO_SERIAL_NUMBER);
+
+  return name + " " + sn;
+}
+
 }  // namespace realsense_hardware_interface
