@@ -55,6 +55,7 @@ public:
   hardware_interface::return_type read() override;
 
 private:
+  std::string serial_;
   std::string joint_;
   std::string left_image_key_;
   std::string right_image_key_;
