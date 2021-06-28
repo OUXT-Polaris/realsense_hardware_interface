@@ -33,6 +33,7 @@ hardware_interface::return_type T265HardwareInterface::configure(
     right_image_key_ = getHardwareParameter<std::string>("right_image_key");
     left_image_key_ = getHardwareParameter<std::string>("left_image_key");
   }
+  serial_ = getHardwareParameter<std::string>("serial");
   return hardware_interface::return_type::OK;
 }
 
@@ -54,6 +55,9 @@ hardware_interface::return_type T265HardwareInterface::start()
       right_image_key_, getImageMatSize("t265_fisheye"), Poco::SharedMemory::AccessMode::AM_WRITE);
     left_image_memory_ptr_ = std::make_shared<Poco::SharedMemory>(
       left_image_key_, getImageMatSize("t265_fisheye"), Poco::SharedMemory::AccessMode::AM_WRITE);
+  }
+  if (serial_ != "") {
+    cfg_.enable_device(serial_);
   }
   pipe_.start(cfg_);
   return hardware_interface::return_type::OK;
