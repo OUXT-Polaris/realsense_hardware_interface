@@ -20,6 +20,7 @@
   <depend>nav_msgs</depend>
   <depend>quaternion_operation</depend>
   <depend>libpoco-dev</depend>
+  <depend>librealsense2</depend>
   <depend>sensor_msgs</depend>
   <depend>cv_bridge</depend>
   <depend>image_transport</depend>
