@@ -46,7 +46,7 @@ target_include_directories(
   ${OpenCV_INCLUDE_DIRS}
 )
 target_link_libraries(realsense_hardware_interface
-  realsense2
+  ${realsense2_LIBRARY}
   Poco::Foundation
   ${OpenCV_LIBRARIES}
 )
@@ -79,7 +79,7 @@ target_include_directories(
   ${OpenCV_INCLUDE_DIRS}
 )
 target_link_libraries(realsense_controller_interface
-  realsense2
+  ${realsense2_LIBRARY}
   Poco::Foundation
   ${OpenCV_LIBRARIES}
 )
