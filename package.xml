@@ -2,7 +2,7 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>realsense_hardware_interface</name>
-  <version>0.0.0</version>
+  <version>0.0.1</version>
   <description>ros2 hardware interface for realsense camera</description>
   <maintainer email="ms.kataoka@gmail.com">masaya</maintainer>
   <license>apache 2.0</license>

@@ -2,8 +2,8 @@
 Changelog for package realsense_hardware_interface
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.0.1 (2021-07-21)
+------------------
 * add depends
 * enable pass test
 * enable print device infomation
