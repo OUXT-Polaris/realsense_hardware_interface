@@ -34,7 +34,7 @@
 
 namespace realsense_hardware_interface
 {
-class Rs2PosePublisher : public controller_interface::ControllerInterface
+class Rs2ImuPublisher : public controller_interface::ControllerInterface
 {
 public:
   REALSENSE_HARDWARE_INTERFACE_PUBLIC

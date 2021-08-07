@@ -101,7 +101,7 @@ hardware_interface::return_type T265HardwareInterface::read()
       memcpy(right_image_memory_ptr_->begin(), (void *)image.data, getImageMatSize("t265_fisheye"));
     }
   }
-  if(imu_->isReady()) {
+  if (imu_->isReady()) {
     imu_handle_ptr_->setValue(imu_);
   }
   return hardware_interface::return_type::OK;
