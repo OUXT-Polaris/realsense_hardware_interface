@@ -34,45 +34,19 @@
 
 namespace realsense_hardware_interface
 {
-struct rs2_imu
+class rs2_imu
 {
 public:
   rs2_imu(
     const rs2_quaternion & orientation, const rs2_vector & angular_velocity,
-    const rs2_vector & acceleration)
-  : orientation_(orientation),
-    angular_velocity_(angular_velocity),
-    acceleration_(acceleration),
-    orientation_ready_(false),
-    angular_velocity_ready_(false),
-    acceleration_ready_(false)
-  {
-  }
+    const rs2_vector & acceleration);
   const rs2_quaternion getOrientation() const { return orientation_; }
   const rs2_vector getAngularVelocity() const { return angular_velocity_; }
   const rs2_vector getAcceleration() const { return acceleration_; }
-  void setOrientation(const rs2_quaternion & orientation)
-  {
-    orientation_ = orientation;
-    orientation_ready_ = true;
-  }
-  void setAngularVelocity(const rs2_vector & angular_velocity)
-  {
-    angular_velocity_ = angular_velocity;
-    angular_velocity_ready_ = true;
-  }
-  void setAcceleration(const rs2_vector & acceleration)
-  {
-    acceleration_ = acceleration;
-    acceleration_ready_ = true;
-  }
-  bool isReady() const
-  {
-    if (orientation_ready_ && angular_velocity_ready_ && acceleration_ready_) {
-      return true;
-    }
-    return false;
-  }
+  void setOrientation(const rs2_quaternion & orientation);
+  void setAngularVelocity(const rs2_vector & angular_velocity);
+  void setAcceleration(const rs2_vector & acceleration);
+  bool isReady() const;
 
 private:
   rs2_quaternion orientation_;
@@ -181,8 +155,8 @@ public:
   void appendStateInterface(std::vector<hardware_interface::StateInterface> & interfaces);
   void appendStateInterfaceNames(
     const std::string & joint_name, std::vector<std::string> & interface_names);
-  void setValue(
-    const rs2_pose & pose, const rs2_vector angular_velocity, const rs2_vector acceleration);
+  void setValue(const rs2_imu & imu);
+  void setValue(std::shared_ptr<rs2_imu> imu);
   void setValue(const std::vector<hardware_interface::LoanedStateInterface> & interface);
   const rs2_imu getValue() const;
 };

@@ -16,6 +16,44 @@
 
 namespace realsense_hardware_interface
 {
+rs2_imu::rs2_imu(
+  const rs2_quaternion & orientation, const rs2_vector & angular_velocity,
+  const rs2_vector & acceleration)
+: orientation_(orientation),
+  angular_velocity_(angular_velocity),
+  acceleration_(acceleration),
+  orientation_ready_(false),
+  angular_velocity_ready_(false),
+  acceleration_ready_(false)
+{
+}
+
+void rs2_imu::setOrientation(const rs2_quaternion & orientation)
+{
+  orientation_ = orientation;
+  orientation_ready_ = true;
+}
+
+void rs2_imu::setAngularVelocity(const rs2_vector & angular_velocity)
+{
+  angular_velocity_ = angular_velocity;
+  angular_velocity_ready_ = true;
+}
+
+void rs2_imu::setAcceleration(const rs2_vector & acceleration)
+{
+  acceleration_ = acceleration;
+  acceleration_ready_ = true;
+}
+
+bool rs2_imu::isReady() const
+{
+  if (orientation_ready_ && angular_velocity_ready_ && acceleration_ready_) {
+    return true;
+  }
+  return false;
+}
+
 void toMsg(const rs2_vector & point, geometry_msgs::msg::Point & msg)
 {
   msg.x = point.z * -1;
@@ -224,6 +262,20 @@ void Rs2ImuHandle::appendStateInterfaceNames(
   orientation.appendStateInterfaceNames(joint_name, interface_names);
   angular_velocity.appendStateInterfaceNames(joint_name, interface_names);
   acceleration.appendStateInterfaceNames(joint_name, interface_names);
+}
+
+void Rs2ImuHandle::setValue(const rs2_imu & imu)
+{
+  orientation.setValue(imu.getOrientation());
+  angular_velocity.setValue(imu.getAngularVelocity());
+  acceleration.setValue(imu.getAcceleration());
+}
+
+void Rs2ImuHandle::setValue(std::shared_ptr<rs2_imu> imu)
+{
+  orientation.setValue(imu->getOrientation());
+  angular_velocity.setValue(imu->getAngularVelocity());
+  acceleration.setValue(imu->getAcceleration());
 }
 
 const rs2_imu Rs2ImuHandle::getValue() const
