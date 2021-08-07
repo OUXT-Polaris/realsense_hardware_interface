@@ -34,9 +34,24 @@
 
 namespace realsense_hardware_interface
 {
+struct rs2_imu
+{
+public:
+  rs2_imu(
+    const rs2_quaternion & orientation, const rs2_vector & angular_velocity,
+    const rs2_vector & acceleration)
+  : orientation(orientation), angular_velocity(angular_velocity), acceleration(acceleration)
+  {
+  }
+  const rs2_quaternion orientation;
+  const rs2_vector angular_velocity;
+  const rs2_vector acceleration;
+};
+
 void toMsg(const rs2_vector & point, geometry_msgs::msg::Point & msg);
 void toMsg(const rs2_quaternion & quat, geometry_msgs::msg::Quaternion & msg);
 void toMsg(const rs2_vector & vector, geometry_msgs::msg::Vector3 & msg);
+void toMsg(const rs2_imu & imu, sensor_msgs::msg::Imu & msg);
 void toMsg(const rs2_vector & linear, const rs2_vector & angular, geometry_msgs::msg::Twist & msg);
 void toMsg(
   const rs2_pose & pose, const std::string & realsense_frame, const std::string & odom_frame,
@@ -110,20 +125,6 @@ public:
   void setValue(const rs2_quaternion & quat);
   void setValue(const std::vector<hardware_interface::LoanedStateInterface> & interface);
   const rs2_quaternion getValue() const;
-};
-
-struct rs2_imu
-{
-public:
-  rs2_imu(
-    const rs2_quaternion & orientation, const rs2_vector & angular_velocity,
-    const rs2_vector & acceleration)
-  : orientation(orientation), angular_velocity(angular_velocity), acceleration(acceleration)
-  {
-  }
-  const rs2_quaternion orientation;
-  const rs2_vector angular_velocity;
-  const rs2_vector acceleration;
 };
 
 class Rs2ImuHandle
