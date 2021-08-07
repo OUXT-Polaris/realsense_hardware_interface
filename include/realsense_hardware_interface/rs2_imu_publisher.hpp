@@ -51,7 +51,7 @@ public:
   controller_interface::InterfaceConfiguration state_interface_configuration() const override
   {
     std::vector<std::string> interface_names = {};
-    // handle_->appendStateInterfaceNames(joint_, interface_names);
+    handle_->appendStateInterfaceNames(joint_, interface_names);
     return controller_interface::InterfaceConfiguration{
       controller_interface::interface_configuration_type::INDIVIDUAL, interface_names};
   }
@@ -79,6 +79,7 @@ public:
 
 private:
   std::string joint_;
+  std::shared_ptr<Rs2ImuHandle> handle_;
 };
 }  // namespace realsense_hardware_interface
 

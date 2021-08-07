@@ -40,12 +40,47 @@ public:
   rs2_imu(
     const rs2_quaternion & orientation, const rs2_vector & angular_velocity,
     const rs2_vector & acceleration)
-  : orientation(orientation), angular_velocity(angular_velocity), acceleration(acceleration)
+  : orientation_(orientation),
+    angular_velocity_(angular_velocity),
+    acceleration_(acceleration),
+    orientation_ready_(false),
+    angular_velocity_ready_(false),
+    acceleration_ready_(false)
   {
   }
-  const rs2_quaternion orientation;
-  const rs2_vector angular_velocity;
-  const rs2_vector acceleration;
+  const rs2_quaternion getOrientation() const { return orientation_; }
+  const rs2_vector getAngularVelocity() const { return angular_velocity_; }
+  const rs2_vector getAcceleration() const { return acceleration_; }
+  void setOrientation(const rs2_quaternion & orientation)
+  {
+    orientation_ = orientation;
+    orientation_ready_ = true;
+  }
+  void setAngularVelocity(const rs2_vector & angular_velocity)
+  {
+    angular_velocity_ = angular_velocity;
+    angular_velocity_ready_ = true;
+  }
+  void setAcceleration(const rs2_vector & acceleration)
+  {
+    acceleration_ = acceleration;
+    acceleration_ready_ = true;
+  }
+  bool isReady() const
+  {
+    if (orientation_ready_ && angular_velocity_ready_ && acceleration_ready_) {
+      return true;
+    }
+    return false;
+  }
+
+private:
+  rs2_quaternion orientation_;
+  bool orientation_ready_;
+  rs2_vector angular_velocity_;
+  bool angular_velocity_ready_;
+  rs2_vector acceleration_;
+  bool acceleration_ready_;
 };
 
 void toMsg(const rs2_vector & point, geometry_msgs::msg::Point & msg);

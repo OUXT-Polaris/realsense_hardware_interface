@@ -43,6 +43,9 @@ std::vector<hardware_interface::StateInterface> T265HardwareInterface::export_st
   std::vector<hardware_interface::StateInterface> interfaces = {};
   pose_handle_ptr_ = std::make_shared<Rs2PoseHandle>(joint_, "rs2_pose", rs2_pose());
   pose_handle_ptr_->appendStateInterface(interfaces);
+  imu_handle_ptr_ =
+    std::make_shared<Rs2ImuHandle>(joint_, "rs2_imu", rs2_pose(), rs2_vector(), rs2_vector());
+  imu_handle_ptr_->appendStateInterface(interfaces);
   return interfaces;
 }
 

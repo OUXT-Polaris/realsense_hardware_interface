@@ -40,9 +40,9 @@ void toMsg(const rs2_vector & vector, geometry_msgs::msg::Vector3 & msg)
 
 void toMsg(const rs2_imu & imu, sensor_msgs::msg::Imu & msg)
 {
-  toMsg(imu.orientation, msg.orientation);
-  toMsg(imu.angular_velocity, msg.angular_velocity);
-  toMsg(imu.acceleration, msg.linear_acceleration);
+  toMsg(imu.getOrientation(), msg.orientation);
+  toMsg(imu.getAngularVelocity(), msg.angular_velocity);
+  toMsg(imu.getAcceleration(), msg.linear_acceleration);
 }
 
 void toMsg(const rs2_vector & linear, const rs2_vector & angular, geometry_msgs::msg::Twist & msg)
