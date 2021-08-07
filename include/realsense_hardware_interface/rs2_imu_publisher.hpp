@@ -19,16 +19,14 @@
 #include <realtime_tools/realtime_publisher.h>
 
 #include <controller_interface/controller_interface.hpp>
-#include <diagnostic_msgs/msg/diagnostic_array.hpp>
-#include <geometry_msgs/msg/transform_stamped.hpp>
 #include <memory>
 #include <rclcpp/subscription.hpp>
 #include <rclcpp_lifecycle/node_interfaces/lifecycle_node_interface.hpp>
 #include <rclcpp_lifecycle/state.hpp>
 #include <realsense_hardware_interface/util.hpp>
 #include <realsense_hardware_interface/visibility_control.hpp>
+#include <sensor_msgs/msg/imu.hpp>
 #include <string>
-#include <tf2_msgs/msg/tf_message.hpp>
 #include <unordered_map>
 #include <vector>
 
@@ -80,6 +78,10 @@ public:
 private:
   std::string joint_;
   std::shared_ptr<Rs2ImuHandle> handle_;
+  rclcpp::Clock::SharedPtr clock_ptr_;
+  std::string imu_frame_;
+  std::string imu_topic_;
+  rclcpp::Publisher<sensor_msgs::msg::Imu>::SharedPtr imu_pub_;
 };
 }  // namespace realsense_hardware_interface
 

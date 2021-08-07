@@ -7,6 +7,13 @@
         rs2 pose publisher controller plugin for realsense
       </description>
     </class>
+    <class name="realsense_hardware_interface/Rs2ImuPublisher"
+    type="realsense_hardware_interface::Rs2ImuPublisher"
+    base_class_type="controller_interface::ControllerInterface">
+      <description>
+        Imu publisher controller plugin for realsense
+      </description>
+    </class>
     <class name="realsense_hardware_interface/Rs2ImagePublisher"
     type="realsense_hardware_interface::Rs2ImagePublisher"
     base_class_type="controller_interface::ControllerInterface">
