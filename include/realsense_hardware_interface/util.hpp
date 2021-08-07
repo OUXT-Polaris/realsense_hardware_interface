@@ -28,6 +28,7 @@
 #include <opencv2/opencv.hpp>  // Include OpenCV API
 #include <rclcpp/rclcpp.hpp>
 #include <sensor_msgs/msg/image.hpp>
+#include <sensor_msgs/msg/imu.hpp>
 #include <string>
 #include <vector>
 
@@ -109,6 +110,45 @@ public:
   void setValue(const rs2_quaternion & quat);
   void setValue(const std::vector<hardware_interface::LoanedStateInterface> & interface);
   const rs2_quaternion getValue() const;
+};
+
+struct rs2_imu
+{
+public:
+  rs2_imu(
+    const rs2_quaternion & orientation, const rs2_vector & angular_velocity,
+    const rs2_vector & acceleration)
+  : orientation(orientation), angular_velocity(angular_velocity), acceleration(acceleration)
+  {
+  }
+  const rs2_quaternion orientation;
+  const rs2_vector angular_velocity;
+  const rs2_vector acceleration;
+};
+
+class Rs2ImuHandle
+{
+public:
+  const std::string sensor_name;
+  const std::string name;
+
+private:
+  Rs2QuaternionHandle orientation;
+  Rs2VectorHandle angular_velocity;
+  Rs2VectorHandle acceleration;
+
+public:
+  Rs2ImuHandle() = delete;
+  Rs2ImuHandle(
+    const std::string & sensor_name, const std::string & name, const rs2_pose & pose,
+    const rs2_vector angular_velocity, const rs2_vector acceleration);
+  void appendStateInterface(std::vector<hardware_interface::StateInterface> & interfaces);
+  void appendStateInterfaceNames(
+    const std::string & joint_name, std::vector<std::string> & interface_names);
+  void setValue(
+    const rs2_pose & pose, const rs2_vector angular_velocity, const rs2_vector acceleration);
+  void setValue(const std::vector<hardware_interface::LoanedStateInterface> & interface);
+  const rs2_imu getValue() const;
 };
 
 class Rs2PoseHandle

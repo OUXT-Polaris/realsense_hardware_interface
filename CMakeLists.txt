@@ -70,6 +70,7 @@ pluginlib_export_plugin_description_file(hardware_interface realsense_hardware_i
 add_library(realsense_controller_interface SHARED
   src/rs2_pose_publisher.cpp
   src/rs2_image_publisher.cpp
+  src/rs2_imu_publisher.cpp
   src/util.cpp
 )
 target_include_directories(
