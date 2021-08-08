@@ -86,6 +86,7 @@ target_link_libraries(realsense_controller_interface
 )
 ament_target_dependencies(realsense_controller_interface
   controller_interface
+  hardware_interface
   pluginlib
   rclcpp
   ros2_control

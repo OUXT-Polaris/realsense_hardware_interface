@@ -51,6 +51,8 @@ controller_interface::return_type Rs2ImuPublisher::update()
   rclcpp::Time time = clock_ptr_->now();
   sensor_msgs::msg::Imu imu;
   toMsg(rs2_imu, imu);
+  imu.header.frame_id = imu_frame_;
+  imu.header.stamp = time;
   imu_pub_->publish(imu);
   return controller_interface::return_type::OK;
 }

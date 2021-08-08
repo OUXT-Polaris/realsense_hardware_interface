@@ -87,7 +87,7 @@ hardware_interface::return_type T265HardwareInterface::read()
     imu_->setAcceleration(accel_frame.get_motion_data());
   }
   if (rs2::motion_frame gyro_frame = frameset.first_or_default(RS2_STREAM_GYRO)) {
-    imu_->setAcceleration(gyro_frame.get_motion_data());
+    imu_->setAngularVelocity(gyro_frame.get_motion_data());
   }
   if (retrive_image_) {
     const auto frame_left = frameset.get_fisheye_frame(1);

@@ -23,6 +23,7 @@ rs2_imu_publisher:
   ros__parameters:
     imu_frame: t265_link
     imu_topic : /imu
+    joint: t265_link
 
 right_image_publisher:
   ros__parameters:

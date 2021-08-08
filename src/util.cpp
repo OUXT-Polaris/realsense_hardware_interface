@@ -271,6 +271,13 @@ void Rs2ImuHandle::setValue(const rs2_imu & imu)
   acceleration.setValue(imu.getAcceleration());
 }
 
+void Rs2ImuHandle::setValue(const std::vector<hardware_interface::LoanedStateInterface> & interface)
+{
+  orientation.setValue(interface);
+  angular_velocity.setValue(interface);
+  acceleration.setValue(interface);
+}
+
 void Rs2ImuHandle::setValue(std::shared_ptr<rs2_imu> imu)
 {
   orientation.setValue(imu->getOrientation());
