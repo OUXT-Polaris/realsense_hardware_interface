@@ -28,14 +28,39 @@
 #include <opencv2/opencv.hpp>  // Include OpenCV API
 #include <rclcpp/rclcpp.hpp>
 #include <sensor_msgs/msg/image.hpp>
+#include <sensor_msgs/msg/imu.hpp>
 #include <string>
 #include <vector>
 
 namespace realsense_hardware_interface
 {
+class rs2_imu
+{
+public:
+  rs2_imu(
+    const rs2_quaternion & orientation, const rs2_vector & angular_velocity,
+    const rs2_vector & acceleration);
+  const rs2_quaternion getOrientation() const { return orientation_; }
+  const rs2_vector getAngularVelocity() const { return angular_velocity_; }
+  const rs2_vector getAcceleration() const { return acceleration_; }
+  void setOrientation(const rs2_quaternion & orientation);
+  void setAngularVelocity(const rs2_vector & angular_velocity);
+  void setAcceleration(const rs2_vector & acceleration);
+  bool isReady() const;
+
+private:
+  rs2_quaternion orientation_;
+  bool orientation_ready_;
+  rs2_vector angular_velocity_;
+  bool angular_velocity_ready_;
+  rs2_vector acceleration_;
+  bool acceleration_ready_;
+};
+
 void toMsg(const rs2_vector & point, geometry_msgs::msg::Point & msg);
 void toMsg(const rs2_quaternion & quat, geometry_msgs::msg::Quaternion & msg);
 void toMsg(const rs2_vector & vector, geometry_msgs::msg::Vector3 & msg);
+void toMsg(const rs2_imu & imu, sensor_msgs::msg::Imu & msg);
 void toMsg(const rs2_vector & linear, const rs2_vector & angular, geometry_msgs::msg::Twist & msg);
 void toMsg(
   const rs2_pose & pose, const std::string & realsense_frame, const std::string & odom_frame,
@@ -109,6 +134,31 @@ public:
   void setValue(const rs2_quaternion & quat);
   void setValue(const std::vector<hardware_interface::LoanedStateInterface> & interface);
   const rs2_quaternion getValue() const;
+};
+
+class Rs2ImuHandle
+{
+public:
+  const std::string sensor_name;
+  const std::string name;
+
+private:
+  Rs2QuaternionHandle orientation;
+  Rs2VectorHandle angular_velocity;
+  Rs2VectorHandle acceleration;
+
+public:
+  Rs2ImuHandle() = delete;
+  Rs2ImuHandle(
+    const std::string & sensor_name, const std::string & name, const rs2_pose & pose,
+    const rs2_vector angular_velocity, const rs2_vector acceleration);
+  void appendStateInterface(std::vector<hardware_interface::StateInterface> & interfaces);
+  void appendStateInterfaceNames(
+    const std::string & joint_name, std::vector<std::string> & interface_names);
+  void setValue(const rs2_imu & imu);
+  void setValue(std::shared_ptr<rs2_imu> imu);
+  void setValue(const std::vector<hardware_interface::LoanedStateInterface> & interface);
+  const rs2_imu getValue() const;
 };
 
 class Rs2PoseHandle

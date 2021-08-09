@@ -16,6 +16,44 @@
 
 namespace realsense_hardware_interface
 {
+rs2_imu::rs2_imu(
+  const rs2_quaternion & orientation, const rs2_vector & angular_velocity,
+  const rs2_vector & acceleration)
+: orientation_(orientation),
+  angular_velocity_(angular_velocity),
+  acceleration_(acceleration),
+  orientation_ready_(false),
+  angular_velocity_ready_(false),
+  acceleration_ready_(false)
+{
+}
+
+void rs2_imu::setOrientation(const rs2_quaternion & orientation)
+{
+  orientation_ = orientation;
+  orientation_ready_ = true;
+}
+
+void rs2_imu::setAngularVelocity(const rs2_vector & angular_velocity)
+{
+  angular_velocity_ = angular_velocity;
+  angular_velocity_ready_ = true;
+}
+
+void rs2_imu::setAcceleration(const rs2_vector & acceleration)
+{
+  acceleration_ = acceleration;
+  acceleration_ready_ = true;
+}
+
+bool rs2_imu::isReady() const
+{
+  if (orientation_ready_ && angular_velocity_ready_ && acceleration_ready_) {
+    return true;
+  }
+  return false;
+}
+
 void toMsg(const rs2_vector & point, geometry_msgs::msg::Point & msg)
 {
   msg.x = point.z * -1;
@@ -36,6 +74,13 @@ void toMsg(const rs2_vector & vector, geometry_msgs::msg::Vector3 & msg)
   msg.x = vector.z * -1;
   msg.y = vector.x * -1;
   msg.z = vector.y;
+}
+
+void toMsg(const rs2_imu & imu, sensor_msgs::msg::Imu & msg)
+{
+  toMsg(imu.getOrientation(), msg.orientation);
+  toMsg(imu.getAngularVelocity(), msg.angular_velocity);
+  toMsg(imu.getAcceleration(), msg.linear_acceleration);
 }
 
 void toMsg(const rs2_vector & linear, const rs2_vector & angular, geometry_msgs::msg::Twist & msg)
@@ -192,6 +237,60 @@ const rs2_quaternion Rs2QuaternionHandle::getValue() const
   return quat;
 }
 
+Rs2ImuHandle::Rs2ImuHandle(
+  const std::string & sensor_name, const std::string & name, const rs2_pose & pose,
+  const rs2_vector angular_velocity, const rs2_vector acceleration)
+: sensor_name(sensor_name),
+  name(name),
+  orientation(sensor_name, name + "::orientation", pose.rotation),
+  angular_velocity(sensor_name, name + "::angular_velocity", angular_velocity),
+  acceleration(sensor_name, name + "::acceleration", acceleration)
+{
+}
+
+void Rs2ImuHandle::appendStateInterface(
+  std::vector<hardware_interface::StateInterface> & interfaces)
+{
+  orientation.appendStateInterface(interfaces);
+  angular_velocity.appendStateInterface(interfaces);
+  acceleration.appendStateInterface(interfaces);
+}
+
+void Rs2ImuHandle::appendStateInterfaceNames(
+  const std::string & joint_name, std::vector<std::string> & interface_names)
+{
+  orientation.appendStateInterfaceNames(joint_name, interface_names);
+  angular_velocity.appendStateInterfaceNames(joint_name, interface_names);
+  acceleration.appendStateInterfaceNames(joint_name, interface_names);
+}
+
+void Rs2ImuHandle::setValue(const rs2_imu & imu)
+{
+  orientation.setValue(imu.getOrientation());
+  angular_velocity.setValue(imu.getAngularVelocity());
+  acceleration.setValue(imu.getAcceleration());
+}
+
+void Rs2ImuHandle::setValue(const std::vector<hardware_interface::LoanedStateInterface> & interface)
+{
+  orientation.setValue(interface);
+  angular_velocity.setValue(interface);
+  acceleration.setValue(interface);
+}
+
+void Rs2ImuHandle::setValue(std::shared_ptr<rs2_imu> imu)
+{
+  orientation.setValue(imu->getOrientation());
+  angular_velocity.setValue(imu->getAngularVelocity());
+  acceleration.setValue(imu->getAcceleration());
+}
+
+const rs2_imu Rs2ImuHandle::getValue() const
+{
+  rs2_imu imu(orientation.getValue(), angular_velocity.getValue(), acceleration.getValue());
+  return imu;
+}
+
 Rs2PoseHandle::Rs2PoseHandle(
   const std::string & sensor_name, const std::string & name, const rs2_pose & pose)
 : sensor_name(sensor_name),
@@ -206,6 +305,7 @@ Rs2PoseHandle::Rs2PoseHandle(
   mapper_confidence(sensor_name, name + "::mapper_confidence", pose.mapper_confidence)
 {
 }
+
 void Rs2PoseHandle::appendStateInterface(
   std::vector<hardware_interface::StateInterface> & interfaces)
 {
@@ -230,6 +330,7 @@ void Rs2PoseHandle::appendStateInterfaceNames(
   tracker_confidence.appendStateInterfaceNames(joint_name, interface_names);
   mapper_confidence.appendStateInterfaceNames(joint_name, interface_names);
 }
+
 void Rs2PoseHandle::setValue(const rs2_pose & pose)
 {
   translation.setValue(pose.translation);
@@ -241,6 +342,7 @@ void Rs2PoseHandle::setValue(const rs2_pose & pose)
   tracker_confidence.setValue(pose.tracker_confidence);
   mapper_confidence.setValue(pose.mapper_confidence);
 }
+
 void Rs2PoseHandle::setValue(
   const std::vector<hardware_interface::LoanedStateInterface> & interface)
 {

@@ -43,12 +43,18 @@ std::vector<hardware_interface::StateInterface> T265HardwareInterface::export_st
   std::vector<hardware_interface::StateInterface> interfaces = {};
   pose_handle_ptr_ = std::make_shared<Rs2PoseHandle>(joint_, "rs2_pose", rs2_pose());
   pose_handle_ptr_->appendStateInterface(interfaces);
+  imu_handle_ptr_ =
+    std::make_shared<Rs2ImuHandle>(joint_, "rs2_imu", rs2_pose(), rs2_vector(), rs2_vector());
+  imu_handle_ptr_->appendStateInterface(interfaces);
   return interfaces;
 }
 
 hardware_interface::return_type T265HardwareInterface::start()
 {
+  imu_ = std::make_shared<rs2_imu>(rs2_quaternion(), rs2_vector(), rs2_vector());
   cfg_.enable_stream(RS2_STREAM_POSE);
+  cfg_.enable_stream(RS2_STREAM_GYRO);
+  cfg_.enable_stream(RS2_STREAM_ACCEL);
   if (retrive_image_) {
     cfg_.enable_stream(RS2_STREAM_FISHEYE, 1, RS2_FORMAT_Y8);
     cfg_.enable_stream(RS2_STREAM_FISHEYE, 2, RS2_FORMAT_Y8);
@@ -75,6 +81,13 @@ hardware_interface::return_type T265HardwareInterface::read()
   pipe_.poll_for_frames(&frameset);
   if (rs2::pose_frame pose_frame = frameset.first_or_default(RS2_STREAM_POSE)) {
     pose_handle_ptr_->setValue(pose_frame.get_pose_data());
+    imu_->setOrientation(pose_frame.get_pose_data().rotation);
+  }
+  if (rs2::motion_frame accel_frame = frameset.first_or_default(RS2_STREAM_ACCEL)) {
+    imu_->setAcceleration(accel_frame.get_motion_data());
+  }
+  if (rs2::motion_frame gyro_frame = frameset.first_or_default(RS2_STREAM_GYRO)) {
+    imu_->setAngularVelocity(gyro_frame.get_motion_data());
   }
   if (retrive_image_) {
     const auto frame_left = frameset.get_fisheye_frame(1);
@@ -87,6 +100,9 @@ hardware_interface::return_type T265HardwareInterface::read()
       const auto image = frameToMat(frame_right);
       memcpy(right_image_memory_ptr_->begin(), (void *)image.data, getImageMatSize("t265_fisheye"));
     }
+  }
+  if (imu_->isReady()) {
+    imu_handle_ptr_->setValue(imu_);
   }
   return hardware_interface::return_type::OK;
 }
