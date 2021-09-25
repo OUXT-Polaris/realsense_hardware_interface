@@ -101,10 +101,19 @@ void Rs2ImagePublisher::publishImage()
   next_update_time_ = next_update_time_ + update_duration_;
 }
 
+#if GALACTIC
+controller_interface::return_type Rs2ImagePublisher::update(
+  const rclcpp::Time & time, const rclcpp::Duration &)
+#else
 controller_interface::return_type Rs2ImagePublisher::update()
+#endif
 {
   auto node = get_node();
+#if GALACTIC
+  const auto now = time;
+#else
   const auto now = node->get_clock()->now();
+#endif
   if (std::fabs(now.seconds() - next_update_time_) < update_duration_ * 0.5) {
     publishImage();
     return controller_interface::return_type::OK;

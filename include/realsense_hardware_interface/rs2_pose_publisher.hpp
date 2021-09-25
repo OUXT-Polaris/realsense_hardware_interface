@@ -82,7 +82,12 @@ public:
   }
 
   REALSENSE_HARDWARE_INTERFACE_PUBLIC
+#if GALACTIC
+  controller_interface::return_type update(
+    const rclcpp::Time & time, const rclcpp::Duration & period) override;
+#else
   controller_interface::return_type update() override;
+#endif
 
 private:
   std::string joint_;
