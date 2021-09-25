@@ -52,11 +52,19 @@ Rs2PosePublisher::on_configure(const rclcpp_lifecycle::State & /*previous_state*
   return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
 }
 
+#if GALACTIC
+controller_interface::return_type Rs2PosePublisher::update(
+  const rclcpp::Time & time, const rclcpp::Duration &)
+#else
 controller_interface::return_type Rs2PosePublisher::update()
+#endif
 {
   handle_->setValue(state_interfaces_);
   const auto rs2_pose = handle_->getValue();
-  rclcpp::Time time = clock_ptr_->now();
+#if GALACTIC
+#else
+  rclcpp::Time time = get_node()->get_clock()->now();
+#endif
   nav_msgs::msg::Odometry odom;
   toMsg(rs2_pose, joint_, "odom", time, odom);
   if (odom_pub_realtime_->trylock()) {

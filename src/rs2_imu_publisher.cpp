@@ -44,11 +44,19 @@ Rs2ImuPublisher::on_configure(const rclcpp_lifecycle::State & /*previous_state*/
   return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
 }
 
+#if GALACTIC
+controller_interface::return_type Rs2ImuPublisher::update(
+  const rclcpp::Time & time, const rclcpp::Duration &)
+#else
 controller_interface::return_type Rs2ImuPublisher::update()
+#endif
 {
   handle_->setValue(state_interfaces_);
   const auto rs2_imu = handle_->getValue();
-  rclcpp::Time time = clock_ptr_->now();
+#if GALACTIC
+#else
+  rclcpp::Time time = get_node()->get_clock()->now();
+#endif
   sensor_msgs::msg::Imu imu;
   toMsg(rs2_imu, imu);
   imu.header.frame_id = imu_frame_;
