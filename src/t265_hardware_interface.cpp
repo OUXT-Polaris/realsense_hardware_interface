@@ -18,12 +18,25 @@
 
 namespace realsense_hardware_interface
 {
+#if GALACTIC
+rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
+T265HardwareInterface::on_init(const hardware_interface::HardwareInfo & info)
+#else
 hardware_interface::return_type T265HardwareInterface::configure(
   const hardware_interface::HardwareInfo & info)
+#endif
 {
+#if GALACTIC
+  if (
+    SensorInterface::on_init(info) !=
+    rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS) {
+    return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::ERROR;
+  }
+#else
   if (configure_default(info) != hardware_interface::return_type::OK) {
     return hardware_interface::return_type::ERROR;
   }
+#endif
   if (info.joints.size() != 1) {
     throw std::runtime_error("joint size should be 1");
   }
@@ -35,7 +48,11 @@ hardware_interface::return_type T265HardwareInterface::configure(
   }
   serial_ = getHardwareParameter<std::string>("serial");
   getRealsenseDeviceLiet();
+#if GALACTIC
+  return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
+#else
   return hardware_interface::return_type::OK;
+#endif
 }
 
 std::vector<hardware_interface::StateInterface> T265HardwareInterface::export_state_interfaces()
@@ -49,6 +66,7 @@ std::vector<hardware_interface::StateInterface> T265HardwareInterface::export_st
   return interfaces;
 }
 
+#ifndef GALACTIC
 hardware_interface::return_type T265HardwareInterface::start()
 {
   imu_ = std::make_shared<rs2_imu>(rs2_quaternion(), rs2_vector(), rs2_vector());
@@ -74,6 +92,7 @@ hardware_interface::return_type T265HardwareInterface::stop()
 {
   return hardware_interface::return_type::OK;
 }
+#endif
 
 hardware_interface::return_type T265HardwareInterface::read()
 {
