@@ -17,12 +17,20 @@
 
 #include <Poco/SharedMemory.h>
 
+#if GALACTIC
+#include <hardware_interface/system_interface.hpp>
+#else
 #include <hardware_interface/base_interface.hpp>
+#endif
 #include <hardware_interface/handle.hpp>
 #include <hardware_interface/hardware_info.hpp>
 #include <hardware_interface/sensor_interface.hpp>
 #include <hardware_interface/types/hardware_interface_return_values.hpp>
+#if GALACTIC
+#include <hardware_interface/types/hardware_interface_type_values.hpp>
+#else
 #include <hardware_interface/types/hardware_interface_status_values.hpp>
+#endif
 #include <librealsense2/rs.hpp>
 #include <memory>
 #include <rclcpp/rclcpp.hpp>
@@ -34,22 +42,34 @@
 namespace realsense_hardware_interface
 {
 class T265HardwareInterface
+#if GALACTIC
+: public hardware_interface::SensorInterface
+#else
 : public hardware_interface::BaseInterface<hardware_interface::SensorInterface>
+#endif
 {
 public:
   RCLCPP_SHARED_PTR_DEFINITIONS(T265HardwareInterface)
 
+#if GALACTIC
+  REALSENSE_HARDWARE_INTERFACE_PUBLIC
+  rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn on_init(
+    const hardware_interface::HardwareInfo & info) override;
+#else
   REALSENSE_HARDWARE_INTERFACE_PUBLIC
   hardware_interface::return_type configure(const hardware_interface::HardwareInfo & info) override;
+#endif
 
   REALSENSE_HARDWARE_INTERFACE_PUBLIC
   std::vector<hardware_interface::StateInterface> export_state_interfaces() override;
 
+#ifndef GALACTIC
   REALSENSE_HARDWARE_INTERFACE_PUBLIC
   hardware_interface::return_type start() override;
 
   REALSENSE_HARDWARE_INTERFACE_PUBLIC
   hardware_interface::return_type stop() override;
+#endif
 
   REALSENSE_HARDWARE_INTERFACE_PUBLIC
   hardware_interface::return_type read() override;
