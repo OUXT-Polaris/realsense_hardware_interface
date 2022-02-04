@@ -18,7 +18,6 @@
   <depend>hardware_interface</depend>
   <depend>tf2_msgs</depend>
   <depend>nav_msgs</depend>
-  <depend>quaternion_operation</depend>
   <depend>libpoco-dev</depend>
   <depend>librealsense2</depend>
   <depend>sensor_msgs</depend>

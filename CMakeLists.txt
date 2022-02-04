@@ -26,7 +26,6 @@ find_package(hardware_interface REQUIRED)
 find_package(nav_msgs REQUIRED)
 find_package(controller_interface REQUIRED)
 find_package(realsense2 REQUIRED)
-find_package(quaternion_operation REQUIRED)
 find_package(tf2_msgs REQUIRED)
 find_package(OpenCV REQUIRED)
 find_package(image_transport REQUIRED)
@@ -62,7 +61,6 @@ ament_target_dependencies(realsense_hardware_interface
   realtime_tools
   nav_msgs
   tf2_msgs
-  quaternion_operation
   image_transport
   sensor_msgs
   cv_bridge
@@ -97,7 +95,6 @@ ament_target_dependencies(realsense_controller_interface
   realtime_tools
   nav_msgs
   tf2_msgs
-  quaternion_operation
   image_transport
   sensor_msgs
   cv_bridge
@@ -117,7 +114,6 @@ ament_export_dependencies(
   realtime_tools
   nav_msgs
   tf2_msgs
-  quaternion_operation
   image_transport
   sensor_msgs
   cv_bridge
