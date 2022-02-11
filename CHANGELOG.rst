@@ -2,8 +2,8 @@
 Changelog for package realsense_hardware_interface
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.0.2 (2022-02-11)
+------------------
 * Merge pull request `#21 <https://github.com/OUXT-Polaris/realsense_hardware_interface/issues/21>`_ from OUXT-Polaris/fix/depends_diagnostic_msgs
   add diagnostic_msgs to the depends
 * add diagnostic_msgs to the depends
