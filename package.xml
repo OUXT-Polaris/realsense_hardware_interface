@@ -27,6 +27,7 @@
   <depend>libusb-1.0-dev</depend>
   <depend>pkg-config</depend>
   <depend>gtk3</depend>
+  <depend>diagnostic_msgs</depend>
   
   <exec_depend>rviz2</exec_depend>
 
