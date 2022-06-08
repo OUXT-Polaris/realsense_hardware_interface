@@ -81,7 +81,7 @@ def generate_launch_description():
                 cmd=[
                     "ros2",
                     "control",
-                    "load_start_controller",
+                    "load_controller",
                     "rs2_pose_publisher"],
                 output="screen",
                 shell=True,
@@ -90,7 +90,7 @@ def generate_launch_description():
                 cmd=[
                     "ros2",
                     "control",
-                    "load_start_controller",
+                    "load_controller",
                     "rs2_imu_publisher"],
                 output="screen",
                 shell=True,
@@ -99,7 +99,7 @@ def generate_launch_description():
                 cmd=[
                     "ros2",
                     "control",
-                    "load_start_controller",
+                    "load_controller",
                     "right_image_publisher"],
                 output="screen",
                 shell=True,
