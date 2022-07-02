@@ -18,7 +18,7 @@
 
 namespace realsense_hardware_interface
 {
-#if GALACTIC
+#if defined(GALACTIC) || defined(HUMBLE)
 rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
 T265HardwareInterface::on_init(const hardware_interface::HardwareInfo & info)
 #else
@@ -26,7 +26,7 @@ hardware_interface::return_type T265HardwareInterface::configure(
   const hardware_interface::HardwareInfo & info)
 #endif
 {
-#if GALACTIC
+#if defined(GALACTIC) || defined(HUMBLE)
   if (
     SensorInterface::on_init(info) !=
     rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS) {
@@ -48,7 +48,7 @@ hardware_interface::return_type T265HardwareInterface::configure(
   }
   serial_ = getHardwareParameter<std::string>("serial");
   getRealsenseDeviceLiet();
-#if GALACTIC
+#if defined(GALACTIC) || defined(HUMBLE)
   return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
 #else
   return hardware_interface::return_type::OK;

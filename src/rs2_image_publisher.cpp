@@ -101,7 +101,7 @@ void Rs2ImagePublisher::publishImage()
   next_update_time_ = next_update_time_ + update_duration_;
 }
 
-#if GALACTIC
+#if defined(GALACTIC) || defined(HUMBLE)
 controller_interface::return_type Rs2ImagePublisher::update(
   const rclcpp::Time & time, const rclcpp::Duration &)
 #else
@@ -109,7 +109,7 @@ controller_interface::return_type Rs2ImagePublisher::update()
 #endif
 {
   auto node = get_node();
-#if GALACTIC
+#if defined(GALACTIC) || defined(HUMBLE)
   const auto now = time;
 #else
   const auto now = node->get_clock()->now();

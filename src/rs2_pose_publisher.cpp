@@ -52,7 +52,7 @@ Rs2PosePublisher::on_configure(const rclcpp_lifecycle::State & /*previous_state*
   return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
 }
 
-#if GALACTIC
+#if defined(GALACTIC) || defined(HUMBLE)
 controller_interface::return_type Rs2PosePublisher::update(
   const rclcpp::Time & time, const rclcpp::Duration &)
 #else
@@ -61,7 +61,7 @@ controller_interface::return_type Rs2PosePublisher::update()
 {
   handle_->setValue(state_interfaces_);
   const auto rs2_pose = handle_->getValue();
-#if GALACTIC
+#if defined(GALACTIC) || defined(HUMBLE)
 #else
   rclcpp::Time time = get_node()->get_clock()->now();
 #endif
