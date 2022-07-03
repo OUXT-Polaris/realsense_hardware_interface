@@ -70,6 +70,7 @@ ament_target_dependencies(realsense_hardware_interface
   cv_bridge
   Poco
   OpenCV
+  librealsense_vendor
 )
 pluginlib_export_plugin_description_file(hardware_interface realsense_hardware_interface.xml)
 
@@ -104,6 +105,7 @@ ament_target_dependencies(realsense_controller_interface
   cv_bridge
   Poco
   OpenCV
+  librealsense_vendor
 )
 pluginlib_export_plugin_description_file(controller_interface realsense_controller_interface.xml)
 
@@ -123,6 +125,7 @@ ament_export_dependencies(
   cv_bridge
   Poco
   OpenCV
+  librealsense_vendor
 )
 
 install(
