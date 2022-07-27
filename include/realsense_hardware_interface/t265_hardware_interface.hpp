@@ -63,13 +63,13 @@ public:
   REALSENSE_HARDWARE_INTERFACE_PUBLIC
   std::vector<hardware_interface::StateInterface> export_state_interfaces() override;
 
-#ifndef GALACTIC
-  REALSENSE_HARDWARE_INTERFACE_PUBLIC
-  hardware_interface::return_type start() override;
+// #ifndef GALACTIC
+//   REALSENSE_HARDWARE_INTERFACE_PUBLIC
+//   hardware_interface::return_type start() override;
 
-  REALSENSE_HARDWARE_INTERFACE_PUBLIC
-  hardware_interface::return_type stop() override;
-#endif
+//   REALSENSE_HARDWARE_INTERFACE_PUBLIC
+//   hardware_interface::return_type stop() override;
+// #endif
 
   REALSENSE_HARDWARE_INTERFACE_PUBLIC
   hardware_interface::return_type read() override;
