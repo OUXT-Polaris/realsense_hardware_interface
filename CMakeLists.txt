@@ -36,6 +36,7 @@ find_package(image_transport REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(cv_bridge REQUIRED)
 find_package(Poco REQUIRED Foundation)
+find_package(diagnostic_msgs REQUIRED)
 
 include_directories(
   include
@@ -65,6 +66,7 @@ ament_target_dependencies(realsense_hardware_interface
   realtime_tools
   nav_msgs
   tf2_msgs
+  diagnostic_msgs
   image_transport
   sensor_msgs
   cv_bridge
@@ -100,6 +102,7 @@ ament_target_dependencies(realsense_controller_interface
   realtime_tools
   nav_msgs
   tf2_msgs
+  diagnostic_msgs
   image_transport
   sensor_msgs
   cv_bridge
@@ -122,6 +125,7 @@ ament_export_dependencies(
   tf2_msgs
   image_transport
   sensor_msgs
+  diagnostic_msgs
   cv_bridge
   Poco
   OpenCV
