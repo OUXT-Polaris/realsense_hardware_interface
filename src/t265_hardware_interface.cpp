@@ -94,7 +94,7 @@ std::vector<hardware_interface::StateInterface> T265HardwareInterface::export_st
 // }
 // #endif
 
-hardware_interface::return_type T265HardwareInterface::read()
+hardware_interface::return_type T265HardwareInterface::read(const rclcpp::Time & time, const rclcpp::Duration & period)
 {
   rs2::frameset frameset;
   pipe_.poll_for_frames(&frameset);
