@@ -72,7 +72,7 @@ public:
 // #endif
 
   REALSENSE_HARDWARE_INTERFACE_PUBLIC
-  hardware_interface::return_type read() override;
+  hardware_interface::return_type read(const rclcpp::Time & time, const rclcpp::Duration & period) override;
 
 private:
   std::string serial_;
