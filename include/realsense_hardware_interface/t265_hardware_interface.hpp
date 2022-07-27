@@ -17,7 +17,7 @@
 
 #include <Poco/SharedMemory.h>
 
-#if GALACTIC
+#if defined(GALACTIC) || defined(HUMBLE)
 #include <hardware_interface/system_interface.hpp>
 #else
 #include <hardware_interface/base_interface.hpp>
@@ -26,7 +26,7 @@
 #include <hardware_interface/hardware_info.hpp>
 #include <hardware_interface/sensor_interface.hpp>
 #include <hardware_interface/types/hardware_interface_return_values.hpp>
-#if GALACTIC
+#if defined(GALACTIC) || defined(HUMBLE)
 #include <hardware_interface/types/hardware_interface_type_values.hpp>
 #else
 #include <hardware_interface/types/hardware_interface_status_values.hpp>
@@ -42,7 +42,7 @@
 namespace realsense_hardware_interface
 {
 class T265HardwareInterface
-#if GALACTIC
+#if defined(GALACTIC) || defined(HUMBLE)
 : public hardware_interface::SensorInterface
 #else
 : public hardware_interface::BaseInterface<hardware_interface::SensorInterface>
@@ -51,7 +51,7 @@ class T265HardwareInterface
 public:
   RCLCPP_SHARED_PTR_DEFINITIONS(T265HardwareInterface)
 
-#if GALACTIC
+#if defined(GALACTIC) || defined(HUMBLE)
   REALSENSE_HARDWARE_INTERFACE_PUBLIC
   rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn on_init(
     const hardware_interface::HardwareInfo & info) override;
@@ -63,16 +63,16 @@ public:
   REALSENSE_HARDWARE_INTERFACE_PUBLIC
   std::vector<hardware_interface::StateInterface> export_state_interfaces() override;
 
-#ifndef GALACTIC
-  REALSENSE_HARDWARE_INTERFACE_PUBLIC
-  hardware_interface::return_type start() override;
+// #ifndef GALACTIC
+//   REALSENSE_HARDWARE_INTERFACE_PUBLIC
+//   hardware_interface::return_type start() override;
+
+//   REALSENSE_HARDWARE_INTERFACE_PUBLIC
+//   hardware_interface::return_type stop() override;
+// #endif
 
   REALSENSE_HARDWARE_INTERFACE_PUBLIC
-  hardware_interface::return_type stop() override;
-#endif
-
-  REALSENSE_HARDWARE_INTERFACE_PUBLIC
-  hardware_interface::return_type read() override;
+  hardware_interface::return_type read(const rclcpp::Time & time, const rclcpp::Duration & period) override;
 
 private:
   std::string serial_;

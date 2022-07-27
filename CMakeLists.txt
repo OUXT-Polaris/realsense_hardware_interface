@@ -15,6 +15,10 @@ if($ENV{ROS_DISTRO} STREQUAL "galactic")
   add_definitions(-DGALACTIC)
 endif()
 
+if($ENV{ROS_DISTRO} STREQUAL "humble")
+  add_definitions(-DHUMBLE)
+endif()
+
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
@@ -25,13 +29,14 @@ find_package(realtime_tools REQUIRED)
 find_package(hardware_interface REQUIRED)
 find_package(nav_msgs REQUIRED)
 find_package(controller_interface REQUIRED)
-find_package(realsense2 REQUIRED)
+find_package(librealsense_vendor REQUIRED)
 find_package(tf2_msgs REQUIRED)
 find_package(OpenCV REQUIRED)
 find_package(image_transport REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(cv_bridge REQUIRED)
 find_package(Poco REQUIRED Foundation)
+find_package(diagnostic_msgs REQUIRED)
 
 include_directories(
   include
@@ -61,11 +66,13 @@ ament_target_dependencies(realsense_hardware_interface
   realtime_tools
   nav_msgs
   tf2_msgs
+  diagnostic_msgs
   image_transport
   sensor_msgs
   cv_bridge
   Poco
   OpenCV
+  librealsense_vendor
 )
 pluginlib_export_plugin_description_file(hardware_interface realsense_hardware_interface.xml)
 
@@ -95,11 +102,13 @@ ament_target_dependencies(realsense_controller_interface
   realtime_tools
   nav_msgs
   tf2_msgs
+  diagnostic_msgs
   image_transport
   sensor_msgs
   cv_bridge
   Poco
   OpenCV
+  librealsense_vendor
 )
 pluginlib_export_plugin_description_file(controller_interface realsense_controller_interface.xml)
 
@@ -116,9 +125,11 @@ ament_export_dependencies(
   tf2_msgs
   image_transport
   sensor_msgs
+  diagnostic_msgs
   cv_bridge
   Poco
   OpenCV
+  librealsense_vendor
 )
 
 install(

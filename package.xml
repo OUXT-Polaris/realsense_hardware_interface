@@ -19,7 +19,7 @@
   <depend>tf2_msgs</depend>
   <depend>nav_msgs</depend>
   <depend>libpoco-dev</depend>
-  <depend>librealsense2</depend>
+  <depend>librealsense_vendor</depend>
   <depend>sensor_msgs</depend>
   <depend>cv_bridge</depend>
   <depend>image_transport</depend>

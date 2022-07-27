@@ -3,3 +3,7 @@ repositories:
     type: git
     url: https://github.com/OUXT-Polaris/ouxt_common.git
     version: master
+  librealsense_vendor:
+    type: git
+    url: https://github.com/OUXT-Polaris/librealsense_vendor.git
+    version: master
