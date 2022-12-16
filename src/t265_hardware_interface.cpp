@@ -18,7 +18,7 @@
 
 namespace realsense_hardware_interface
 {
-#if GALACTIC
+#if defined(GALACTIC) || defined(HUMBLE)
 rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
 T265HardwareInterface::on_init(const hardware_interface::HardwareInfo & info)
 #else
@@ -26,7 +26,7 @@ hardware_interface::return_type T265HardwareInterface::configure(
   const hardware_interface::HardwareInfo & info)
 #endif
 {
-#if GALACTIC
+#if defined(GALACTIC) || defined(HUMBLE)
   if (
     SensorInterface::on_init(info) !=
     rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS) {
@@ -48,7 +48,7 @@ hardware_interface::return_type T265HardwareInterface::configure(
   }
   serial_ = getHardwareParameter<std::string>("serial");
   getRealsenseDeviceLiet();
-#if GALACTIC
+#if defined(GALACTIC) || defined(HUMBLE)
   return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
 #else
   return hardware_interface::return_type::OK;
@@ -66,35 +66,35 @@ std::vector<hardware_interface::StateInterface> T265HardwareInterface::export_st
   return interfaces;
 }
 
-#ifndef GALACTIC
-hardware_interface::return_type T265HardwareInterface::start()
-{
-  imu_ = std::make_shared<rs2_imu>(rs2_quaternion(), rs2_vector(), rs2_vector());
-  cfg_.enable_stream(RS2_STREAM_POSE);
-  cfg_.enable_stream(RS2_STREAM_GYRO);
-  cfg_.enable_stream(RS2_STREAM_ACCEL);
-  if (retrive_image_) {
-    cfg_.enable_stream(RS2_STREAM_FISHEYE, 1, RS2_FORMAT_Y8);
-    cfg_.enable_stream(RS2_STREAM_FISHEYE, 2, RS2_FORMAT_Y8);
-    right_image_memory_ptr_ = std::make_shared<Poco::SharedMemory>(
-      right_image_key_, getImageMatSize("t265_fisheye"), Poco::SharedMemory::AccessMode::AM_WRITE);
-    left_image_memory_ptr_ = std::make_shared<Poco::SharedMemory>(
-      left_image_key_, getImageMatSize("t265_fisheye"), Poco::SharedMemory::AccessMode::AM_WRITE);
-  }
-  if (serial_ != "") {
-    cfg_.enable_device(serial_);
-  }
-  pipe_.start(cfg_);
-  return hardware_interface::return_type::OK;
-}
+// #ifndef GALACTIC
+// hardware_interface::return_type T265HardwareInterface::start()
+// {
+//   imu_ = std::make_shared<rs2_imu>(rs2_quaternion(), rs2_vector(), rs2_vector());
+//   cfg_.enable_stream(RS2_STREAM_POSE);
+//   cfg_.enable_stream(RS2_STREAM_GYRO);
+//   cfg_.enable_stream(RS2_STREAM_ACCEL);
+//   if (retrive_image_) {
+//     cfg_.enable_stream(RS2_STREAM_FISHEYE, 1, RS2_FORMAT_Y8);
+//     cfg_.enable_stream(RS2_STREAM_FISHEYE, 2, RS2_FORMAT_Y8);
+//     right_image_memory_ptr_ = std::make_shared<Poco::SharedMemory>(
+//       right_image_key_, getImageMatSize("t265_fisheye"), Poco::SharedMemory::AccessMode::AM_WRITE);
+//     left_image_memory_ptr_ = std::make_shared<Poco::SharedMemory>(
+//       left_image_key_, getImageMatSize("t265_fisheye"), Poco::SharedMemory::AccessMode::AM_WRITE);
+//   }
+//   if (serial_ != "") {
+//     cfg_.enable_device(serial_);
+//   }
+//   pipe_.start(cfg_);
+//   return hardware_interface::return_type::OK;
+// }
 
-hardware_interface::return_type T265HardwareInterface::stop()
-{
-  return hardware_interface::return_type::OK;
-}
-#endif
+// hardware_interface::return_type T265HardwareInterface::stop()
+// {
+//   return hardware_interface::return_type::OK;
+// }
+// #endif
 
-hardware_interface::return_type T265HardwareInterface::read()
+hardware_interface::return_type T265HardwareInterface::read(const rclcpp::Time & time, const rclcpp::Duration & period)
 {
   rs2::frameset frameset;
   pipe_.poll_for_frames(&frameset);
